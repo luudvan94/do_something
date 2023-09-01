@@ -1,7 +1,5 @@
-import 'package:do_something/src/features/task/app_colors.dart';
 import 'package:do_something/src/features/task/app_theme.dart';
 import 'package:do_something/src/features/task/task_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {

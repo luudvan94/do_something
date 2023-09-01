@@ -4,8 +4,6 @@ import 'package:do_something/src/features/task/not_dragging_task_container.dart'
 import 'package:do_something/src/features/task/rating.dart';
 import 'package:do_something/src/features/task/task.dart';
 import 'package:do_something/src/features/task/task_container.dart';
-import 'package:do_something/src/features/task/task_content.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 // mock task array with different ratings, and long name

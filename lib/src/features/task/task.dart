@@ -1,8 +1,5 @@
 // create Task model with id, name
-import 'dart:math';
-
 import 'package:do_something/src/features/task/rating.dart';
-import 'package:flutter/material.dart';
 
 class Task {
   final String id;
