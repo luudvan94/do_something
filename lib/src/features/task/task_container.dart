@@ -1,6 +1,6 @@
-import 'package:do_something/src/features/task/bouncing_mixing.dart';
+import 'package:do_something/src/features/mixings/bouncing_mixing.dart';
 import 'package:do_something/src/features/task/drag_clipper.dart';
-import 'package:do_something/src/features/task/dragging_mixing.dart';
+import 'package:do_something/src/features/mixings/dragging_mixing.dart';
 import 'package:do_something/src/features/task/task.dart';
 import 'package:do_something/src/features/task/task_content.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +52,7 @@ class _TaskContainerState extends State<TaskContainer>
       child: ClipPath(
         clipper: DragClipper(offset: offset),
         child: Container(
-          color: widget.task.rating.getColorFromTheme(context),
+          color: widget.task.ratingEnum.getColorFromTheme(context),
           child: buildBounceable(
             TaskContent(task: widget.task),
           ),

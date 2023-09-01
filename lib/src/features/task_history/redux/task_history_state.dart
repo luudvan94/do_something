@@ -1,4 +1,5 @@
 import 'package:do_something/src/features/task_history/redux/task_history.dart';
+import 'package:do_something/src/utils/logger.dart';
 import 'package:hive/hive.dart';
 
 var taskHistoryStateKeyBox = 'taskHistoryStateKeyBox';
@@ -27,5 +28,6 @@ class TaskHistoryState {
 var defaultTaskHistoryState = TaskHistoryState(histories: []);
 
 TaskHistoryState loadTaskHistoryState(Box box) {
+  logger.i('Loading task history from Hive');
   return box.get(taskHistoryStateKeyBox, defaultValue: defaultTaskHistoryState);
 }

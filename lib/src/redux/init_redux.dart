@@ -7,6 +7,7 @@ import 'package:do_something/src/features/task_history/redux/task_history_action
 import 'package:do_something/src/features/task_history/redux/task_history_middleware.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_reducer.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_state.dart';
+import 'package:do_something/src/utils/logger.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:redux/redux.dart';
 
@@ -48,5 +49,6 @@ Future<Store> initializeRedux() async {
     middleware: appMiddleware,
   );
 
+  logger.i('Loaded state: $loadedState');
   return store;
 }

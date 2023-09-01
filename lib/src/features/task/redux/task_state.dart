@@ -1,4 +1,5 @@
 import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/utils/logger.dart';
 import 'package:hive/hive.dart';
 
 var taskStateKeyBox = 'taskStateKeyBox';
@@ -30,5 +31,6 @@ class TaskState {
 var defaultTaskState = TaskState(tasks: []);
 
 TaskState loadTaskState(Box box) {
+  logger.i('Loading task from Hive');
   return box.get(taskStateKeyBox, defaultValue: defaultTaskState);
 }
