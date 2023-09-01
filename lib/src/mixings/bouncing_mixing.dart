@@ -9,7 +9,7 @@ mixin BounceableMixin<T extends StatefulWidget>
   void initState() {
     super.initState();
     _bounceController = AnimationController(
-      duration: const Duration(milliseconds: 300),
+      duration: const Duration(milliseconds: 200),
       vsync: this,
     );
 

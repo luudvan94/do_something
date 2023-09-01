@@ -29,7 +29,7 @@ var tasksKey = 'tasksKey';
 var currentTaskIdKey = 'currentTaskIdKey';
 TaskState loadTaskState(Box box) {
   logger.i('Loading task from Hive');
-  var tasks = box.get(tasksKey, defaultValue: []) as List<Task>;
-
+  var dynamic = box.get(tasksKey, defaultValue: []) as List;
+  var tasks = dynamic.cast<Task>();
   return TaskState(tasks: tasks);
 }

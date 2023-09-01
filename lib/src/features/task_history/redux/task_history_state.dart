@@ -29,7 +29,7 @@ var defaultTaskHistoryState = TaskHistoryState(histories: []);
 var taskHistoryKey = 'taskHistoryKey';
 TaskHistoryState loadTaskHistoryState(Box box) {
   logger.i('Loading task history from Hive');
-  var histories =
-      box.get(taskHistoryKey, defaultValue: []) as List<TaskHistory>;
+  var dynamic = box.get(taskHistoryKey, defaultValue: []) as List;
+  var histories = dynamic.cast<TaskHistory>();
   return TaskHistoryState(histories: histories);
 }

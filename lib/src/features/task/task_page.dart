@@ -1,12 +1,20 @@
 import 'dart:math';
 
 import 'package:do_something/src/features/task/not_dragging_task_container.dart';
+import 'package:do_something/src/features/task/rating.dart';
 import 'package:do_something/src/features/task/task.dart';
 import 'package:do_something/src/features/task/task_container.dart';
 import 'package:flutter/material.dart';
 
 // mock task array with different ratings, and long name
-List<Task> tasks = [];
+final tasks = [
+  Task(name: 'Some phrase', reviewDate: DateTime.now(), doneCount: 0),
+  Task(
+      name: 'Some phrase. My name is Luu',
+      rating: Rating.good.toName(),
+      reviewDate: DateTime.now(),
+      doneCount: 0),
+];
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
