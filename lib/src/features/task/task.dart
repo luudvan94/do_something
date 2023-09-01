@@ -1,22 +1,49 @@
 // create Task model with id, name
 import 'package:do_something/src/features/task/rating.dart';
+import 'package:hive/hive.dart';
 
-class Task {
-  final String id;
-  final String name;
-  final Rating rating;
+part 'task.g.dart';
+
+@HiveType(typeId: 0)
+class Task extends HiveObject {
+  @HiveField(0)
+  String id;
+
+  @HiveField(1)
+  String name;
+
+  @HiveField(2)
+  bool isOneTimeDone = false;
+
+  @HiveField(3)
+  String rating;
+
+  @HiveField(4)
+  DateTime reviewDate = DateTime.now();
+
+  @HiveField(5)
+  int ignoreCountLeft = 3;
+
+  @HiveField(6)
+  int doneCount = 0;
+
+  Rating get ratingEnum => RatingExtension.fromName(rating);
 
   // constructor
   Task({
-    required this.id,
+    this.id = '',
     required this.name,
-    this.rating = Rating.neutral,
-  });
+    this.rating = '',
+    required this.reviewDate,
+    required this.doneCount,
+  }) {
+    id = id.isEmpty ? DateTime.now().toString() : id;
+    rating = rating.isEmpty ? Rating.neutral.toName() : rating;
+  }
 
-  factory Task.fromJson(Map<String, dynamic> json) {
-    return Task(
-      id: json['id'],
-      name: json['name'],
-    );
+  @override
+  String toString() {
+    // print task object
+    return 'Task{id: $id, name: $name, isOneTimeDone: $isOneTimeDone, rating: $rating, reviewDate: $reviewDate, ignoreCountLeft: $ignoreCountLeft, doneCount: $doneCount}';
   }
 }

@@ -19,7 +19,7 @@ class _NotDraggingTaskContainerState extends State<NotDraggingTaskContainer> {
   Widget build(BuildContext context) {
     // container with background color and child type TaskContent
     return Container(
-      color: widget.task.rating.getColorFromTheme(context),
+      color: widget.task.ratingEnum.getColorFromTheme(context),
       child: TaskContent(
         task: widget.task,
       ),
