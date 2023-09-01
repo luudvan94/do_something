@@ -13,22 +13,21 @@ mixin BounceableMixin<T extends StatefulWidget>
       vsync: this,
     );
 
-    _bounceAnimation = Tween<double>(begin: 1.0, end: 0.97).animate(
-      CurvedAnimation(
-        parent: _bounceController,
-        curve: Curves.elasticIn,
-      ),
+    _bounceAnimation = Tween<double>(begin: 1.0, end: 0.95).animate(
+      CurvedAnimation(parent: _bounceController, curve: Curves.elasticIn),
     );
 
-    _bounceController.addListener(() {
-      setState(() {});
+    _bounceController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _bounceController.reverse();
+      }
     });
+
+    startBoucingEffect();
   }
 
-  void bounce() {
-    _bounceController.forward(from: 0).then((_) {
-      _bounceController.reverse();
-    });
+  void startBoucingEffect() {
+    _bounceController.forward(from: 0);
   }
 
   @override
@@ -38,8 +37,12 @@ mixin BounceableMixin<T extends StatefulWidget>
   }
 
   Widget buildBounceable(Widget child) {
-    return Transform.scale(
-      scale: _bounceAnimation.value,
+    return AnimatedBuilder(
+      animation: _bounceAnimation,
+      builder: (context, child) => Transform.scale(
+        scale: _bounceAnimation.value,
+        child: child,
+      ),
       child: child,
     );
   }

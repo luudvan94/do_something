@@ -10,15 +10,15 @@ extension RatingColor on Rating {
     // colors based on rating
     switch (this) {
       case Rating.veryBad:
-        return AppColors.systemRed;
+        return AppTheme.appColors(context).systemRed;
       case Rating.bad:
-        return AppColors.systemOrange;
+        return AppTheme.appColors(context).systemOrange;
       case Rating.neutral:
-        return AppColors.systemIndigo;
+        return AppTheme.appColors(context).systemIndigo;
       case Rating.good:
-        return AppColors.systemGreen;
+        return AppTheme.appColors(context).systemGreen;
       case Rating.veryGood:
-        return AppColors.systemTeal;
+        return AppTheme.appColors(context).systemTeal;
     }
   }
 }
