@@ -1,6 +1,7 @@
 // create taskStateReduce
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_state.dart';
+import 'package:do_something/src/utils/logger.dart';
 
 TaskState taskStateReduce(TaskState state, dynamic action) {
   // add switch case for action
@@ -31,6 +32,9 @@ TaskState newTaskHandler(TaskState state, NewTaskAction action) {
 TaskState deleteTaskHandler(TaskState state, DeleteTaskAction action) {
   // delete task from state
   // return new state
+  var updatedTasks =
+      state.tasks.where((task) => task.id != action.task.id).toList();
+  logger.i('Updated tasks: $updatedTasks');
   return state.copyWith(
     tasks: state.tasks.where((task) => task.id != action.task.id).toList(),
   );

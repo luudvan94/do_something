@@ -28,8 +28,10 @@ AppState appReducer(AppState state, action) {
 }
 
 final List<Middleware<AppState>> appMiddleware = [
-  TypedMiddleware<AppState, TaskAction>(saveTaskMiddleware()),
-  TypedMiddleware<AppState, TaskHistoryAction>(saveTaskHistoryMiddleware()),
+  TypedMiddleware<AppState, TaskAction>(
+      saveTaskMiddleware(TaskSaver.sharedInstance)),
+  TypedMiddleware<AppState, TaskHistoryAction>(
+      saveTaskHistoryMiddleware(TaskHistorySaver.sharedInstance)),
 ];
 
 Future<Store> initializeRedux() async {
