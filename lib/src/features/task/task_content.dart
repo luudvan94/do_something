@@ -15,10 +15,7 @@ class TaskContent extends StatelessWidget {
     return Center(
       child: Text(
         task.name,
-        style: TextStyle(
-          fontSize: Theme.of(context).textTheme.headline2?.fontSize,
-          color: Colors.white,
-        ),
+        style: Theme.of(context).textTheme.headline2,
       ),
     );
   }
