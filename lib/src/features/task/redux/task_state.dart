@@ -14,8 +14,6 @@ class TaskState {
   // add copyWith function
   TaskState copyWith({
     List<Task>? tasks,
-    Task? currentTask,
-    Task? nextTask,
   }) {
     var copy = TaskState(
       tasks: tasks ?? this.tasks,
@@ -27,6 +25,7 @@ class TaskState {
 
 var tasksKey = 'tasksKey';
 var currentTaskIdKey = 'currentTaskIdKey';
+
 TaskState loadTaskState(Box box) {
   logger.i('Loading task from Hive');
   var dynamic = box.get(tasksKey, defaultValue: []) as List;

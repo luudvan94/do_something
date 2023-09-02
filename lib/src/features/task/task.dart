@@ -47,3 +47,13 @@ class Task extends HiveObject {
     return 'Task{id: $id, name: $name, isOneTimeDone: $isOneTimeDone, rating: $rating, reviewDate: $reviewDate, ignoreCountLeft: $ignoreCountLeft, doneCount: $doneCount}';
   }
 }
+
+extension TaskExtension on Task {
+  static Task fromName(String name, Rating rating) {
+    return Task(
+        name: name,
+        reviewDate: DateTime.now(),
+        rating: rating.toName(),
+        doneCount: 0);
+  }
+}

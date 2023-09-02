@@ -13,7 +13,7 @@ extension RatingExtension on Rating {
       case Rating.bad:
         return AppTheme.appColors(context).systemOrange;
       case Rating.neutral:
-        return AppTheme.appColors(context).systemIndigo;
+        return AppTheme.appColors(context).systemPurple;
       case Rating.good:
         return AppTheme.appColors(context).systemGreen;
       case Rating.veryGood:
