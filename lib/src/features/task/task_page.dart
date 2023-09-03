@@ -51,26 +51,29 @@ class _TaskPageState extends State<TaskPage> {
                     : const SizedBox.shrink(),
 
                 // Header at the top of the screen
-                Positioned(
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    child: SafeArea(
-                      child: Header(
-                        task: taskState.currentTask,
-                      ),
-                    )),
+                SafeArea(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          child: Header(
+                            task: taskState.currentTask,
+                          ),
+                        ),
+                        taskState.currentTask != null
+                            ? Positioned(
+                                bottom: 0,
+                                left: 0,
+                                right: 0,
+                                child: Footer(task: taskState.currentTask!))
+                            : const SizedBox.shrink(),
+                      ]),
+                )
 
                 // Footer at bottom of the screen
-                taskState.currentTask != null
-                    ? Positioned(
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        child: SafeArea(
-                            child: Footer(task: taskState.currentTask!)),
-                      )
-                    : const SizedBox.shrink(),
               ],
             ),
           );
