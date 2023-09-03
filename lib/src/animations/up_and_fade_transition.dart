@@ -11,7 +11,7 @@ class UpAndFadeTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fadeAnimation = Tween<double>(
-      begin: 0.2,
+      begin: 0.0,
       end: 1.0,
     ).animate(
       CurvedAnimation(

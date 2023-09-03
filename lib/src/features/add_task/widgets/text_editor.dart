@@ -1,9 +1,30 @@
-import 'package:do_something/auto_size_text_field.dart';
-import 'package:do_something/src/theme/app_theme.dart';
+// Package imports
 import 'package:flutter/material.dart';
 
+// Project imports
+import 'package:do_something/auto_size_text_field.dart';
+import 'package:do_something/src/theme/app_theme.dart';
+
+// Meaningful constants
+const double minFontSize = 70;
+const int minLines = 1;
+const int maxLines = 10;
+
+typedef CallbackAction = void Function(String);
+
 class TextEditor extends StatefulWidget {
-  const TextEditor({Key? key}) : super(key: key);
+  final String placeholder;
+  final String value;
+  final CallbackAction onSubmitted;
+  final CallbackAction? onChanged;
+
+  const TextEditor({
+    Key? key,
+    required this.value,
+    required this.placeholder,
+    required this.onSubmitted,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   State<TextEditor> createState() => _TextEditorState();
@@ -11,29 +32,50 @@ class TextEditor extends StatefulWidget {
 
 class _TextEditorState extends State<TextEditor> {
   final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.value.isNotEmpty) {
+      _controller.text = widget.value;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // container with blue background color and full size
     return Container(
         color: Colors.transparent,
-        child: Expanded(
-          child: AutoSizeTextField(
-            controller: _controller,
-            decoration: InputDecoration(
-              alignLabelWithHint: true,
-              hintText: 'what do you want to do',
-              hintStyle: AppTheme.textStyle(context).headline1,
-              border: InputBorder.none,
-              isDense: true,
-            ),
-            minFontSize: 70,
-            fullwidth: true,
-            style: AppTheme.textStyle(context).headline1,
-            textAlign: TextAlign.left,
-            minLines: 1,
-            maxLines: 10,
-            wrapWords: true,
-          ),
+        child: Flex(
+          direction: Axis.vertical,
+          children: [
+            Expanded(
+              child: AutoSizeTextField(
+                autofocus: true,
+                controller: _controller,
+                decoration: InputDecoration(
+                  hintText: widget.placeholder,
+                  hintStyle: AppTheme.textStyle(context).headline1,
+                  border: InputBorder.none,
+                  isDense: true,
+                ),
+                maxLines: maxLines,
+                minFontSize: minFontSize,
+                minLines: minLines,
+                fullwidth: true,
+                style: AppTheme.textStyle(context).headline1,
+                textAlign: TextAlign.left,
+                textInputAction: TextInputAction.done,
+                wrapWords: true,
+                onChanged: (value) {
+                  widget.onChanged!(value);
+                },
+                onSubmitted: (value) {
+                  widget.onSubmitted(value);
+                },
+              ),
+            )
+          ],
         ));
   }
 }

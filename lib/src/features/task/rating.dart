@@ -36,6 +36,21 @@ extension RatingExtension on Rating {
     }
   }
 
+  String toEmoji() {
+    switch (this) {
+      case Rating.veryBad:
+        return '😭';
+      case Rating.bad:
+        return '😞';
+      case Rating.neutral:
+        return '😐';
+      case Rating.good:
+        return '😊';
+      case Rating.veryGood:
+        return '😁';
+    }
+  }
+
   static Rating fromName(String name) {
     switch (name) {
       case 'Very Bad':
@@ -51,5 +66,36 @@ extension RatingExtension on Rating {
       default:
         return Rating.neutral;
     }
+  }
+
+  static List<IdentifiableRating> identifiableRatings() {
+    return [
+      IdentifiableRating(Rating.veryBad),
+      IdentifiableRating(Rating.bad),
+      IdentifiableRating(Rating.neutral),
+      IdentifiableRating(Rating.good),
+      IdentifiableRating(Rating.veryGood),
+    ];
+  }
+}
+
+abstract class Identifiable {
+  String get id;
+}
+
+class IdentifiableRating implements Identifiable {
+  final Rating rating;
+
+  IdentifiableRating(this.rating);
+
+  @override
+  String get id => rating.toString();
+
+  String get name {
+    return rating.toName();
+  }
+
+  String get emoji {
+    return rating.toEmoji();
   }
 }

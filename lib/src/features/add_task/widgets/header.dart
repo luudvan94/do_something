@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+typedef CallbackAction = void Function();
+
 class Header extends StatelessWidget {
-  final Function onBack;
-  final Function onContinue;
+  final CallbackAction onBack;
+  final CallbackAction onContinue;
   final IconData backIcon;
   final IconData continueIcon;
 

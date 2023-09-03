@@ -10,6 +10,8 @@ class AppColors {
   final Color systemBlue = const Color(0xFF007AFF);
   final Color systemIndigo = const Color(0xFF5856D6);
   final Color systemPurple = const Color(0xFFAF52DE);
+  final Color systemGrey = const Color(0xFF8E8E93);
+  final Color systemBlack = const Color(0xFF000000);
   //white color
   final Color systemWhite = const Color(0xFFFFFFFF);
   static const staticWhite = Color(0xFFFFFFFF);
