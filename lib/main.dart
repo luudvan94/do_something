@@ -11,13 +11,13 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final Store store;
+  final Store<AppState> store;
   const MyApp({Key? key, required this.store}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return StoreProvider(
+    return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
           theme: AppTheme.themeData,

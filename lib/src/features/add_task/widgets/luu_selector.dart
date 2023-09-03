@@ -9,16 +9,18 @@ typedef LabelAction = String Function<T extends Identifiable>(T);
 typedef OnSelectedAction = void Function<T extends Identifiable>(T);
 
 class LuuSelector<T extends Identifiable> extends StatefulWidget {
+  final String label;
   final List<Identifiable> items;
-  final LabelAction getLabel;
+  final LabelAction getLabelForItem;
   final OnSelectedAction onSelected;
   final bool isMultipleSelection;
   final Set<Identifiable> selectedItems;
 
   const LuuSelector({
     Key? key,
+    required this.label,
     required this.items,
-    required this.getLabel,
+    required this.getLabelForItem,
     required this.onSelected,
     this.selectedItems = const {},
     this.isMultipleSelection = false,
@@ -47,13 +49,13 @@ class _LuuSelectorState<T extends Identifiable> extends State<LuuSelector> {
         children: [
           Padding(
               padding: const EdgeInsets.all(10),
-              child: AutoSizeText('how you like that?',
+              child: AutoSizeText(widget.label,
                   maxLines: 1, style: AppTheme.textStyle(context).headline2)),
           ...widget.items
               .map((item) => Padding(
                   padding: const EdgeInsets.all(10),
                   child: SelectorButton(
-                    label: widget.getLabel(item),
+                    label: widget.getLabelForItem(item),
                     onSelected: () {
                       setState(() {
                         if (widget.isMultipleSelection) {

@@ -3,19 +3,12 @@ import 'dart:math';
 import 'package:do_something/src/features/task/footer.dart';
 import 'package:do_something/src/features/task/header.dart';
 import 'package:do_something/src/features/task/not_dragging_task_container.dart';
-import 'package:do_something/src/features/task/rating.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/task/redux/task_actions.dart';
+import 'package:do_something/src/features/task/redux/task_state.dart';
 import 'package:do_something/src/features/task/task_container.dart';
+import 'package:do_something/src/redux/init_redux.dart';
 import 'package:flutter/material.dart';
-
-// mock task array with different ratings, and long name
-final tasks = [
-  TaskExtension.fromName('Task 1', Rating.neutral),
-  TaskExtension.fromName('Task 2', Rating.bad),
-  TaskExtension.fromName('Task 3', Rating.good),
-  TaskExtension.fromName('Task 4', Rating.veryBad),
-  TaskExtension.fromName('Task 5', Rating.veryGood),
-];
+import 'package:flutter_redux/flutter_redux.dart';
 
 class TaskPage extends StatefulWidget {
   const TaskPage({Key? key}) : super(key: key);
@@ -25,63 +18,61 @@ class TaskPage extends StatefulWidget {
 }
 
 class _TaskPageState extends State<TaskPage> {
-  late Task currentTask;
-  late Task nextTask;
-
-  int currentIndex = 0;
-
   @override
   void initState() {
     super.initState();
-    currentTask = tasks[currentIndex];
-    nextTask = tasks[currentIndex + 1];
   }
 
   void _handleHalfWidthReached() {
-    setState(() {
-      // Remove the task that reached half width
-
-      if (currentIndex == tasks.length - 1) {
-        currentIndex = 0;
-      } else {
-        currentIndex++;
-      }
-
-      currentTask = nextTask;
-      nextTask = tasks[currentIndex];
-    });
+    var store = StoreProvider.of<AppState>(context);
+    store.dispatch(UpdateNextTaskAction());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          NotDraggingTaskContainer(task: nextTask),
-          TaskContainer(
-              task: currentTask,
-              onHalfWidthReached: () {
-                _handleHalfWidthReached();
-              }),
-          // Header at the top of the screen
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-                child: Header(
-              task: currentTask,
-            )),
-          ),
-          // Footer at bottom of the screen
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: Footer(task: currentTask),
-          ),
-        ],
-      ),
-    );
+    return StoreConnector<AppState, TaskState>(
+        converter: (store) => store.state.taskState,
+        builder: (context, taskState) {
+          return Scaffold(
+            body: Stack(
+              children: [
+                // NotDraggingTaskContainer
+                taskState.nextTask != null
+                    ? NotDraggingTaskContainer(task: taskState.nextTask!)
+                    : const SizedBox.shrink(),
+
+                // TaskContainer
+                taskState.currentTask != null
+                    ? TaskContainer(
+                        task: taskState.currentTask!,
+                        onHalfWidthReached: () {
+                          _handleHalfWidthReached();
+                        })
+                    : const SizedBox.shrink(),
+
+                // Header at the top of the screen
+                SafeArea(
+                    child: Positioned(
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  child: Header(
+                    task: taskState.currentTask,
+                  ),
+                )),
+
+                // Footer at bottom of the screen
+                taskState.currentTask != null
+                    ? Positioned(
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        child: Footer(task: taskState.currentTask!),
+                      )
+                    : const SizedBox.shrink(),
+              ],
+            ),
+          );
+        });
   }
 }

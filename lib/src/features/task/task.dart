@@ -13,7 +13,7 @@ class Task extends HiveObject {
   String name;
 
   @HiveField(2)
-  bool isOneTimeDone = false;
+  bool isOneTimeDone;
 
   @HiveField(3)
   String rating;
@@ -30,13 +30,13 @@ class Task extends HiveObject {
   Rating get ratingEnum => RatingExtension.fromName(rating);
 
   // constructor
-  Task({
-    this.id = '',
-    required this.name,
-    this.rating = '',
-    required this.reviewDate,
-    required this.doneCount,
-  }) {
+  Task(
+      {this.id = '',
+      required this.name,
+      this.rating = '',
+      required this.reviewDate,
+      required this.doneCount,
+      this.isOneTimeDone = false}) {
     id = id.isEmpty ? DateTime.now().toString() : id;
     rating = rating.isEmpty ? Rating.neutral.toName() : rating;
   }

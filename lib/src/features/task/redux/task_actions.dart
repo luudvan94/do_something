@@ -6,6 +6,8 @@ class TaskAction {
   TaskAction(this.task);
 }
 
+class NonTaskAction {}
+
 class NewTaskAction extends TaskAction {
   NewTaskAction(Task task) : super(task);
 }
@@ -19,3 +21,5 @@ class DeleteTaskAction extends TaskAction {
 class UpdateTaskAction extends TaskAction {
   UpdateTaskAction(Task task) : super(task);
 }
+
+class UpdateNextTaskAction extends NonTaskAction {}

@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 
 const oneTab = '  ';
 
-class AddTaskRatingState extends AddTaskBaseState {
+class AddTaskRatingState implements AddTaskBaseState {
   List<Identifiable> ratings =
       Rating.values.map((rating) => IdentifiableRating(rating)).toList();
   IdentifiableRating? selectedRating;
@@ -26,6 +26,7 @@ class AddTaskRatingState extends AddTaskBaseState {
 
   @override
   void apply(AddTaskMediator mediator) {
+    //TODO: redo a logic to be more understandable
     selectedRating = mediator.taskBuilder.rating != null
         ? (ratings.firstWhere((rating) =>
             (rating as IdentifiableRating).name ==
@@ -41,8 +42,9 @@ class AddTaskRatingState extends AddTaskBaseState {
 
     var widget = LuuSelector(
         key: const Key('AddTaskRatingState'),
+        label: 'how you like that?',
         items: ratings,
-        getLabel: _getLabel,
+        getLabelForItem: _getLabel,
         isMultipleSelection: false,
         selectedItems: selectedRating == null ? {} : {selectedRating!},
         onSelected: <T extends Identifiable>(T rating) {

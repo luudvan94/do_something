@@ -40,4 +40,10 @@ mixin DraggableMixing<T extends StatefulWidget>
     );
     _draggingController.forward(from: 0);
   }
+
+  @override
+  void dispose() {
+    _draggingController.dispose();
+    super.dispose();
+  }
 }

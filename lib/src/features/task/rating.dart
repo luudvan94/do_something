@@ -79,6 +79,7 @@ extension RatingExtension on Rating {
   }
 }
 
+//TODO: make it an actual identifiable object or rename, move it to a separate file
 abstract class Identifiable {
   String get id;
 }

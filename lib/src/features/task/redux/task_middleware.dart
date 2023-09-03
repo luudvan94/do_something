@@ -1,5 +1,4 @@
 import 'package:do_something/src/features/task/redux/task_state.dart';
-import 'package:do_something/src/features/task/task.dart';
 import 'package:do_something/src/redux/init_redux.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/utils/logger.dart';
@@ -17,7 +16,7 @@ Middleware<AppState> saveTaskMiddleware(TaskSaver saver) {
       logger.i('Deleting task from Hive');
       saver.saveTasks(store);
     } else if (action is TaskAction) {
-      logger.i('Saving task to Hive');
+      logger.i('Updating task to Hive');
       action.task.save();
     }
   };

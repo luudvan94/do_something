@@ -4,7 +4,7 @@ import 'package:do_something/src/features/task/task.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  final Task task;
+  final Task? task;
 
   const Header({Key? key, required this.task}) : super(key: key);
 
@@ -40,10 +40,12 @@ class Header extends StatelessWidget {
           ),
           Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.edit),
-              ),
+              task != null
+                  ? IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.edit),
+                    )
+                  : const SizedBox.shrink(),
               IconButton(
                 onPressed: () => _onAddButtonPressed(context),
                 iconSize: 32,

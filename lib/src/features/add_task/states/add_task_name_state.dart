@@ -5,7 +5,7 @@ import 'package:do_something/src/features/add_task/widgets/text_editor.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
-class AddTaskNameState extends AddTaskBaseState {
+class AddTaskNameState implements AddTaskBaseState {
   var _name = '';
 
   void _onValueChanged(String value, AddTaskMediator mediator) {

@@ -22,9 +22,8 @@ class TaskAdapter extends TypeAdapter<Task> {
       rating: fields[3] as String,
       reviewDate: fields[4] as DateTime,
       doneCount: fields[6] as int,
-    )
-      ..isOneTimeDone = fields[2] as bool
-      ..ignoreCountLeft = fields[5] as int;
+      isOneTimeDone: fields[2] as bool,
+    )..ignoreCountLeft = fields[5] as int;
   }
 
   @override

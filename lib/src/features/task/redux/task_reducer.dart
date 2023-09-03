@@ -19,10 +19,15 @@ TaskState taskStateReduce(TaskState state, dynamic action) {
     return updateTaskHandler(state, action);
   }
 
+  if (action is UpdateNextTaskAction) {
+    return nextTaskHandler(state, action);
+  }
+
   return state;
 }
 
 TaskState newTaskHandler(TaskState state, NewTaskAction action) {
+  logger.i('New task: ${action.task}');
   // add new task to state
   // return new state
   return state.copyWith(tasks: [...state.tasks, action.task]);
@@ -52,4 +57,11 @@ TaskState updateTaskHandler(TaskState state, UpdateTaskAction action) {
       return task;
     }).toList(),
   );
+}
+
+TaskState nextTaskHandler(TaskState state, UpdateNextTaskAction action) {
+  logger.i('Next task');
+  state.taskManager.calcuateNextTask();
+
+  return state.copyWith(taskManager: state.taskManager);
 }

@@ -24,6 +24,13 @@ class TaskBuilder {
   }
 
   Task build() {
-    throw UnimplementedError();
+    var task = Task(
+        name: name ?? '',
+        rating: rating?.toName() ?? '',
+        isOneTimeDone: isOneTimeDone ?? false,
+        reviewDate: DateTime.now(),
+        doneCount: 0);
+
+    return task;
   }
 }

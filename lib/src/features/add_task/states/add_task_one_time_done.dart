@@ -1,5 +1,5 @@
 import 'package:do_something/src/features/add_task/add_task_page.dart';
-import 'package:do_something/src/features/add_task/states/base_state.dart';
+import 'package:do_something/src/features/add_task/states/add_task_complete_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/luu_selector.dart';
 import 'package:do_something/src/features/task/rating.dart';
@@ -15,7 +15,7 @@ class IdentifiableString implements Identifiable {
   String get id => value;
 }
 
-class AddTaskOneTimeDoneState extends AddTaskBaseState {
+class AddTaskOneTimeDoneState extends AddTaskCompleteState {
   final List<IdentifiableString> answers = [
     IdentifiableString('yes'),
     IdentifiableString('no'),
@@ -28,12 +28,14 @@ class AddTaskOneTimeDoneState extends AddTaskBaseState {
 
   void _onSelected<T extends Identifiable>(T item, AddTaskMediator mediator) {
     _selected = item as IdentifiableString;
+    //TODO: refactoring the logic, avoid the MAGIC string
     mediator.taskBuilder.addIsOneTimeDone(_selected!.value == 'yes');
     mediator.updateStatus(CurrentStateStatus.completed);
   }
 
   @override
   void apply(AddTaskMediator mediator) {
+    //TODO: redo the logic, avoid directly access array element by index
     _selected = mediator.taskBuilder.isOneTimeDone != null
         ? (mediator.taskBuilder.isOneTimeDone! == true
             ? answers[0]
@@ -47,8 +49,9 @@ class AddTaskOneTimeDoneState extends AddTaskBaseState {
 
     var widget = LuuSelector(
         key: const Key('AddTaskOneTimeDoneState'),
+        label: 'Is it one time done?',
         items: answers,
-        getLabel: _getLabel,
+        getLabelForItem: _getLabel,
         selectedItems: _selected == null ? {} : {_selected!},
         onSelected: <T extends Identifiable>(T rating) {
           _onSelected(rating, mediator);
@@ -65,5 +68,6 @@ class AddTaskOneTimeDoneState extends AddTaskBaseState {
   @override
   void onGoNext(BuildContext context, AddTaskMediator mediator) {
     logger.i('AddTaskOneTimeDoneState.onGoNext');
+    super.onGoNext(context, mediator);
   }
 }

@@ -5,7 +5,7 @@ import 'package:do_something/src/features/add_task/widgets/text_editor.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
-class AddTaskDetailsState extends AddTaskBaseState {
+class AddTaskDetailsState implements AddTaskBaseState {
   var _details = '';
 
   @override

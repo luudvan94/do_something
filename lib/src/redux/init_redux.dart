@@ -34,8 +34,9 @@ final List<Middleware<AppState>> appMiddleware = [
       saveTaskHistoryMiddleware(TaskHistorySaver.sharedInstance)),
 ];
 
-Future<Store> initializeRedux() async {
+Future<Store<AppState>> initializeRedux() async {
   await Hive.initFlutter();
+  logger.i('Initializing Hive');
   Hive.registerAdapter(TaskAdapter());
 
   var box = await Hive.openBox(appBoxName);

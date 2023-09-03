@@ -1,4 +1,5 @@
 import 'package:do_something/src/features/add_task/builder/task_builder.dart';
+import 'package:do_something/src/features/add_task/states/add_task_complete_state.dart';
 import 'package:do_something/src/features/add_task/states/add_task_details_state.dart';
 import 'package:do_something/src/features/add_task/states/add_task_name_state.dart';
 import 'package:do_something/src/features/add_task/states/add_task_one_time_done.dart';
@@ -19,7 +20,6 @@ class AddTaskPage extends StatefulWidget {
 }
 
 class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
-  @override
   Widget? childWidget;
 
   AddTaskBaseState get currentState => states[currentStateIndex];
@@ -56,7 +56,8 @@ class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
       AddTaskNameState(),
       AddTaskDetailsState(),
       AddTaskRatingState(),
-      AddTaskOneTimeDoneState()
+      AddTaskOneTimeDoneState(),
+      AddTaskCompleteState(),
     ];
     currentStateIndex = -1;
   }

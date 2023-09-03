@@ -1,25 +1,36 @@
+import 'package:do_something/src/features/task/anki/anki_task_manager.dart';
+import 'package:do_something/src/features/task/anki/task_manager.dart';
 import 'package:do_something/src/features/task/task.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:hive/hive.dart';
 
 class TaskState {
   final List<Task> tasks;
-  // add currentTask, nextTask
+  final TaskManager taskManager;
 
-  Task? get currentTask => null;
-  Task? get nextTask => null;
+  Task? get currentTask {
+    return taskManager.currentTask;
+  }
 
-  TaskState({required this.tasks});
+  Task? get nextTask {
+    return taskManager.nextTask;
+  }
 
-  // add copyWith function
+  TaskState({
+    required this.tasks,
+    TaskManager? taskManager,
+  }) : taskManager = taskManager ?? AnkiTaskManager(tasks: tasks);
+
+  // Add copyWith function
   TaskState copyWith({
     List<Task>? tasks,
+    TaskManager? taskManager,
   }) {
-    var copy = TaskState(
+    return TaskState(
       tasks: tasks ?? this.tasks,
+      taskManager: taskManager ??
+          this.taskManager.copyWith(newTasks: tasks ?? this.tasks),
     );
-
-    return copy;
   }
 }
 
@@ -28,7 +39,7 @@ var currentTaskIdKey = 'currentTaskIdKey';
 
 TaskState loadTaskState(Box box) {
   logger.i('Loading task from Hive');
-  var dynamic = box.get(tasksKey, defaultValue: []) as List;
-  var tasks = dynamic.cast<Task>();
+  var dynamicList = box.get(tasksKey, defaultValue: []) as List;
+  var tasks = dynamicList.cast<Task>();
   return TaskState(tasks: tasks);
 }
