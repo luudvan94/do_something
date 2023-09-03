@@ -1,3 +1,4 @@
+import 'package:do_something/src/features/add_task/add_task_page.dart';
 import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/luu_selector.dart';
@@ -19,7 +20,7 @@ class AddTaskOneTimeDoneState extends AddTaskBaseState {
     IdentifiableString('yes'),
     IdentifiableString('no'),
   ];
-  late IdentifiableString _selected;
+  IdentifiableString? _selected;
 
   String _getLabel<T extends Identifiable>(T item) {
     return (item as IdentifiableString)!.value;
@@ -27,20 +28,28 @@ class AddTaskOneTimeDoneState extends AddTaskBaseState {
 
   void _onSelected<T extends Identifiable>(T item, AddTaskMediator mediator) {
     _selected = item as IdentifiableString;
-    mediator.taskBuilder.addIsOneTimeDone(_selected.value == 'yes');
+    mediator.taskBuilder.addIsOneTimeDone(_selected!.value == 'yes');
+    mediator.updateStatus(CurrentStateStatus.completed);
   }
 
   @override
   void apply(AddTaskMediator mediator) {
-    _selected = mediator.taskBuilder.isOneTimeDone ? answers[0] : answers[1];
+    _selected = mediator.taskBuilder.isOneTimeDone != null
+        ? (mediator.taskBuilder.isOneTimeDone! == true
+            ? answers[0]
+            : answers[1])
+        : null;
+    logger.i('AddTaskOneTimeDoneState.apply: selected: ${_selected?.value}');
 
-    logger.i('AddTaskOneTimeDoneState.apply: selected: ${_selected.value}');
+    mediator.updateStatus(_selected != null
+        ? CurrentStateStatus.completed
+        : CurrentStateStatus.notCompleted);
 
     var widget = LuuSelector(
         key: const Key('AddTaskOneTimeDoneState'),
         items: answers,
         getLabel: _getLabel,
-        selectedItems: {_selected},
+        selectedItems: _selected == null ? {} : {_selected!},
         onSelected: <T extends Identifiable>(T rating) {
           _onSelected(rating, mediator);
         });

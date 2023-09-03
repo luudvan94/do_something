@@ -1,3 +1,4 @@
+import 'package:do_something/src/features/add_task/add_task_page.dart';
 import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/luu_selector.dart';
@@ -20,6 +21,7 @@ class AddTaskRatingState extends AddTaskBaseState {
     logger.i('Selected rating: (${(item as IdentifiableRating).name})');
     selectedRating = item;
     mediator.taskBuilder.addRating(item.rating);
+    mediator.updateStatus(CurrentStateStatus.completed);
   }
 
   @override
@@ -32,6 +34,10 @@ class AddTaskRatingState extends AddTaskBaseState {
 
     logger.i(
         'AddTaskRatingState.apply: selectedRating: ${selectedRating?.name}}');
+
+    mediator.updateStatus(selectedRating != null
+        ? CurrentStateStatus.completed
+        : CurrentStateStatus.notCompleted);
 
     var widget = LuuSelector(
         key: const Key('AddTaskRatingState'),

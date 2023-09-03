@@ -9,6 +9,8 @@ import 'package:do_something/src/features/add_task/widgets/header.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
+enum CurrentStateStatus { completed, notCompleted }
+
 class AddTaskPage extends StatefulWidget {
   const AddTaskPage({Key? key}) : super(key: key);
 
@@ -27,6 +29,8 @@ class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
 
   late List<AddTaskBaseState> states;
   late int currentStateIndex;
+
+  CurrentStateStatus currentStateStatus = CurrentStateStatus.notCompleted;
 
   void _onBackButtonPressed(BuildContext context) {
     logger.i('AddTaskPage._onBackButtonPressed');
@@ -85,6 +89,13 @@ class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
   }
 
   @override
+  void updateStatus(CurrentStateStatus status) {
+    setState(() {
+      currentStateStatus = status;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // just a container with white background and a child is a header with back button and continue button
     return Scaffold(
@@ -96,11 +107,14 @@ class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Header(onBack: () {
-                    _onBackButtonPressed(context);
-                  }, onContinue: () {
-                    _onContiueButtonPressed(context);
-                  }),
+                  Header(
+                      onBack: () {
+                        _onBackButtonPressed(context);
+                      },
+                      onContinue: () {
+                        _onContiueButtonPressed(context);
+                      },
+                      status: currentStateStatus),
                   childWidget != null
                       ? Expanded(child: childWidget!)
                       : const Spacer(),

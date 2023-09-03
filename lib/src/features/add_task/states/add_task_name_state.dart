@@ -1,3 +1,4 @@
+import 'package:do_something/src/features/add_task/add_task_page.dart';
 import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/text_editor.dart';
@@ -7,14 +8,29 @@ import 'package:flutter/material.dart';
 class AddTaskNameState extends AddTaskBaseState {
   var _name = '';
 
+  void _onValueChanged(String value, AddTaskMediator mediator) {
+    _name = value;
+
+    if (validate(value)) {
+      mediator.updateStatus(CurrentStateStatus.completed);
+    } else {
+      mediator.updateStatus(CurrentStateStatus.notCompleted);
+    }
+  }
+
   @override
   void apply(AddTaskMediator mediator) {
+    _name = mediator.taskBuilder.name != null ? mediator.taskBuilder.name! : '';
+
+    mediator.updateStatus(validate(_name)
+        ? CurrentStateStatus.completed
+        : CurrentStateStatus.notCompleted);
     var widget = TextEditor(
         key: const ValueKey('name'),
         placeholder: 'What do I want to do huuuh?',
         value: _name,
         onChanged: (value) {
-          _name = value;
+          _onValueChanged(value, mediator);
         },
         onSubmitted: (value) {
           _name = value;

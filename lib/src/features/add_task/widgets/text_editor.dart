@@ -6,7 +6,7 @@ import 'package:do_something/auto_size_text_field.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 
 // Meaningful constants
-const double minFontSize = 70;
+const double minFontSize = 50;
 const int minLines = 1;
 const int maxLines = 10;
 
@@ -55,7 +55,7 @@ class _TextEditorState extends State<TextEditor> {
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: widget.placeholder,
-                  hintStyle: AppTheme.textStyle(context).headline1,
+                  hintStyle: AppTheme.textStyle(context).headline2,
                   border: InputBorder.none,
                   isDense: true,
                 ),
@@ -63,7 +63,7 @@ class _TextEditorState extends State<TextEditor> {
                 minFontSize: minFontSize,
                 minLines: minLines,
                 fullwidth: true,
-                style: AppTheme.textStyle(context).headline1,
+                style: AppTheme.textStyle(context).headline2,
                 textAlign: TextAlign.left,
                 textInputAction: TextInputAction.done,
                 wrapWords: true,

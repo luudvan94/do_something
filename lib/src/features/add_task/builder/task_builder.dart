@@ -5,7 +5,7 @@ class TaskBuilder {
   String? name;
   String details = '';
   Rating? rating;
-  bool isOneTimeDone = false;
+  bool? isOneTimeDone;
 
   void addName(String name) {
     this.name = name;
