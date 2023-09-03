@@ -1,4 +1,4 @@
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 
 abstract class TaskManager {
   final List<Task> tasks;
@@ -12,6 +12,8 @@ abstract class TaskManager {
   Task? get nextTask;
 
   void calcuateNextTask();
+
+  void markDone();
 
   TaskManager copyWith({List<Task>? newTasks});
 }

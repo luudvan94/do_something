@@ -1,12 +1,10 @@
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 
 class TaskAction {
   final Task task;
 
   TaskAction(this.task);
 }
-
-class NonTaskAction {}
 
 class NewTaskAction extends TaskAction {
   NewTaskAction(Task task) : super(task);
@@ -22,4 +20,6 @@ class UpdateTaskAction extends TaskAction {
   UpdateTaskAction(Task task) : super(task);
 }
 
-class UpdateNextTaskAction extends NonTaskAction {}
+class NextTaskAction extends TaskAction {
+  NextTaskAction(Task task) : super(task);
+}

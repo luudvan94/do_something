@@ -21,6 +21,21 @@ extension RatingExtension on Rating {
     }
   }
 
+  int difficulty() {
+    switch (this) {
+      case Rating.veryBad:
+        return 5;
+      case Rating.bad:
+        return 4;
+      case Rating.neutral:
+        return 3;
+      case Rating.good:
+        return 2;
+      case Rating.veryGood:
+        return 1;
+    }
+  }
+
   String toName() {
     switch (this) {
       case Rating.veryBad:

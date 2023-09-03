@@ -1,5 +1,3 @@
-import 'package:do_something/src/features/task/task.dart';
-import 'package:do_something/src/features/task_history/redux/task_history.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_state.dart';
 import 'package:do_something/src/redux/init_redux.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_actions.dart';

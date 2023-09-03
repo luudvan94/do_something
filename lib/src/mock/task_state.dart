@@ -1,7 +1,7 @@
 // create mock task state
 import 'package:do_something/src/features/task/rating.dart';
 import 'package:do_something/src/features/task/redux/task_state.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 
 TaskState mockTaskState = TaskState(
   tasks: [

@@ -1,5 +1,5 @@
 import 'package:do_something/src/features/task/drag_clipper.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/task_content.dart';
 import 'package:do_something/src/mixings/bouncing_mixing.dart';
 import 'package:do_something/src/mixings/dragging_mixing.dart';

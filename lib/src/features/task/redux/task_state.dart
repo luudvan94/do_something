@@ -1,6 +1,7 @@
 import 'package:do_something/src/features/task/anki/anki_task_manager.dart';
 import 'package:do_something/src/features/task/anki/task_manager.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
+import 'package:do_something/src/utils/date.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:hive/hive.dart';
 
@@ -36,10 +37,22 @@ class TaskState {
 
 var tasksKey = 'tasksKey';
 var currentTaskIdKey = 'currentTaskIdKey';
+var checkInDateKey = 'checkInDateKey';
 
 TaskState loadTaskState(Box box) {
   logger.i('Loading task from Hive');
   var dynamicList = box.get(tasksKey, defaultValue: []) as List;
   var tasks = dynamicList.cast<Task>();
+
+  var latestCheckedInDate =
+      box.get(checkInDateKey, defaultValue: DateTime.now());
+
+  if (isSameDate(latestCheckedInDate, DateTime.now())) {
+    logger.i('Resetting ignoreCount of each task to default of 3');
+    tasks.forEach((task) {
+      task.ignoreCountLeft = 2;
+    });
+    box.put(checkInDateKey, DateTime.now());
+  }
   return TaskState(tasks: tasks);
 }

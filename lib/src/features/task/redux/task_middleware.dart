@@ -9,16 +9,18 @@ Middleware<AppState> saveTaskMiddleware(TaskSaver saver) {
   return (Store<AppState> store, action, NextDispatcher next) async {
     next(action);
 
-    if (action is NewTaskAction) {
-      logger.i('Saving new task to Hive');
-      saver.saveTasks(store);
-    } else if (action is DeleteTaskAction) {
-      logger.i('Deleting task from Hive');
-      saver.saveTasks(store);
-    } else if (action is TaskAction) {
-      logger.i('Updating task to Hive');
-      action.task.save();
-    }
+    // if (action is NewTaskAction) {
+    //   logger.i('Saving new task to Hive');
+    //   saver.saveTasks(store);
+    // } else if (action is DeleteTaskAction) {
+    //   logger.i('Deleting task from Hive');
+    //   saver.saveTasks(store);
+    // } else if (action is TaskAction) {
+    //   logger.i('Updating task to Hive');
+    //   action.task.save();
+    // }
+
+    saver.saveTasks(store);
   };
 }
 

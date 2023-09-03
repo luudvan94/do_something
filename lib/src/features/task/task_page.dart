@@ -25,7 +25,7 @@ class _TaskPageState extends State<TaskPage> {
 
   void _handleHalfWidthReached() {
     var store = StoreProvider.of<AppState>(context);
-    store.dispatch(UpdateNextTaskAction());
+    store.dispatch(NextTaskAction(store.state.taskState.currentTask!));
   }
 
   @override
@@ -51,15 +51,15 @@ class _TaskPageState extends State<TaskPage> {
                     : const SizedBox.shrink(),
 
                 // Header at the top of the screen
-                SafeArea(
-                    child: Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  child: Header(
-                    task: taskState.currentTask,
-                  ),
-                )),
+                Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    child: SafeArea(
+                      child: Header(
+                        task: taskState.currentTask,
+                      ),
+                    )),
 
                 // Footer at bottom of the screen
                 taskState.currentTask != null
@@ -67,7 +67,8 @@ class _TaskPageState extends State<TaskPage> {
                         bottom: 0,
                         left: 0,
                         right: 0,
-                        child: Footer(task: taskState.currentTask!),
+                        child: SafeArea(
+                            child: Footer(task: taskState.currentTask!)),
                       )
                     : const SizedBox.shrink(),
               ],

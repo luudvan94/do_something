@@ -2,7 +2,7 @@ import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_middleware.dart';
 import 'package:do_something/src/features/task/redux/task_reducer.dart';
 import 'package:do_something/src/features/task/redux/task_state.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_actions.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_middleware.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_reducer.dart';

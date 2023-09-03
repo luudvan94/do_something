@@ -36,7 +36,8 @@ class Task extends HiveObject {
       this.rating = '',
       required this.reviewDate,
       required this.doneCount,
-      this.isOneTimeDone = false}) {
+      this.isOneTimeDone = false,
+      this.ignoreCountLeft = 3}) {
     id = id.isEmpty ? DateTime.now().toString() : id;
     rating = rating.isEmpty ? Rating.neutral.toName() : rating;
   }

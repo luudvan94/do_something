@@ -1,5 +1,5 @@
 import 'package:do_something/src/features/task/rating.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 
 class TaskBuilder {
   String? name;

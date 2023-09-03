@@ -1,6 +1,6 @@
 import 'package:do_something/src/animations/up_and_fade_transition.dart';
 import 'package:do_something/src/features/add_task/add_task_page.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {

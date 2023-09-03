@@ -1,4 +1,4 @@
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/task_content.dart';
 import 'package:do_something/src/features/task/rating.dart';
 import 'package:flutter/material.dart';

@@ -19,7 +19,7 @@ TaskState taskStateReduce(TaskState state, dynamic action) {
     return updateTaskHandler(state, action);
   }
 
-  if (action is UpdateNextTaskAction) {
+  if (action is NextTaskAction) {
     return nextTaskHandler(state, action);
   }
 
@@ -59,7 +59,7 @@ TaskState updateTaskHandler(TaskState state, UpdateTaskAction action) {
   );
 }
 
-TaskState nextTaskHandler(TaskState state, UpdateNextTaskAction action) {
+TaskState nextTaskHandler(TaskState state, NextTaskAction action) {
   logger.i('Next task');
   state.taskManager.calcuateNextTask();
 

@@ -1,7 +1,7 @@
 import 'package:do_something/src/features/task/rating.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_middleware.dart';
-import 'package:do_something/src/features/task/task.dart';
+import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/mock/mock_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
