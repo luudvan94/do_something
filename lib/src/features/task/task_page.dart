@@ -38,7 +38,7 @@ class _TaskPageState extends State<TaskPage> {
         builder: (context, taskState) {
           var currentTask = taskState.currentTask;
           var nextTask = taskState.nextTask;
-          var currentTaskColor = TaskColorSet.set1;
+          var currentTaskColor = TaskColorSet.set3;
 
           return Scaffold(
             backgroundColor: AppTheme.appColors(context).background,

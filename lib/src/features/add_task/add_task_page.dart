@@ -143,7 +143,7 @@ class _AddTaskPageState extends State<AddTaskPage>
                 status: currentStateStatus,
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
                 child: ProgressBar(
                     numberOfSteps: states.length - 1, currentStep: currentStep),
               ),

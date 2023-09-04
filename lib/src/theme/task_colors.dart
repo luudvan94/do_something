@@ -55,6 +55,33 @@ class TaskColor {
     background: Color(0xFFd4a373),
     foreground: Colors.black,
   );
+
+  //e63946
+  static const e63946 = TaskColor(
+    background: Color(0xFFe63946),
+  );
+
+  //f1faee
+  static const f1faee = TaskColor(
+    background: Color(0xFFf1faee),
+    foreground: Colors.black,
+  );
+
+  //a8dadc
+  static const a8dadc = TaskColor(
+    background: Color(0xFFa8dadc),
+    foreground: Colors.black,
+  );
+
+  //457b9d
+  static const blue457b9d = TaskColor(
+    background: Color(0xFF457b9d),
+  );
+
+  //1d3557
+  static const blue1d3557 = TaskColor(
+    background: Color(0xFF1d3557),
+  );
 }
 
 class TaskColorSet {
@@ -83,6 +110,16 @@ class TaskColorSet {
       Rating.neutral: TaskColor.fefae0,
       Rating.good: TaskColor.e9edc9,
       Rating.veryGood: TaskColor.ccd5ae,
+    },
+  );
+
+  static TaskColorSet set3 = const TaskColorSet(
+    colorRatingMap: {
+      Rating.veryBad: TaskColor.e63946,
+      Rating.bad: TaskColor.blue457b9d,
+      Rating.neutral: TaskColor.blue1d3557,
+      Rating.good: TaskColor.a8dadc,
+      Rating.veryGood: TaskColor.f1faee,
     },
   );
 }
