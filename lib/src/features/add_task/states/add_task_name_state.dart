@@ -25,6 +25,7 @@ class AddTaskNameState implements AddTaskBaseState {
     mediator.updateStatus(validate(_name)
         ? CurrentStateStatus.completed
         : CurrentStateStatus.notCompleted);
+
     var widget = TextEditor(
         key: const ValueKey('name'),
         placeholder: 'What do I want to do huuuh?',

@@ -47,10 +47,11 @@ TaskState loadTaskState(Box box) {
   var latestCheckedInDate =
       box.get(checkInDateKey, defaultValue: DateTime.now());
 
+  //TODO: just for testing, the condition should be !isSameDate(latestCheckedInDate, DateTime.now())
   if (isSameDate(latestCheckedInDate, DateTime.now())) {
     logger.i('Resetting ignoreCount of each task to default of 3');
     tasks.forEach((task) {
-      task.ignoreCountLeft = 2;
+      task.ignoreCountLeft = 3;
     });
     box.put(checkInDateKey, DateTime.now());
   }

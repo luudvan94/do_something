@@ -1,10 +1,13 @@
 import 'package:do_something/src/features/models/task.dart';
+import 'package:do_something/src/theme/task_colors.dart';
 import 'package:flutter/material.dart';
 
 class Footer extends StatefulWidget {
   final Task task;
+  final TaskColor taskColor;
 
-  const Footer({Key? key, required this.task}) : super(key: key);
+  const Footer({Key? key, required this.task, required this.taskColor})
+      : super(key: key);
 
   @override
   _FooterState createState() => _FooterState();
@@ -51,7 +54,8 @@ class _FooterState extends State<Footer> with SingleTickerProviderStateMixin {
             child: IconButton(
               onPressed: () {},
               iconSize: 32,
-              icon: Icon(Icons.arrow_upward),
+              icon: const Icon(Icons.arrow_upward),
+              color: widget.taskColor.foreground,
             ),
           ),
         ],

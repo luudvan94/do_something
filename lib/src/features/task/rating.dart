@@ -1,26 +1,11 @@
 // colors extention based on rating
-import 'package:do_something/src/theme/app_theme.dart';
+import 'package:do_something/src/theme/task_colors.dart';
 import 'package:flutter/material.dart';
 
 enum Rating { veryBad, bad, neutral, good, veryGood }
 
+//TODO: create a separate color set for task
 extension RatingExtension on Rating {
-  Color getColorFromTheme(BuildContext context) {
-    // colors based on rating
-    switch (this) {
-      case Rating.veryBad:
-        return AppTheme.appColors(context).systemRed;
-      case Rating.bad:
-        return AppTheme.appColors(context).systemOrange;
-      case Rating.neutral:
-        return AppTheme.appColors(context).systemPurple;
-      case Rating.good:
-        return AppTheme.appColors(context).systemGreen;
-      case Rating.veryGood:
-        return AppTheme.appColors(context).systemTeal;
-    }
-  }
-
   int difficulty() {
     switch (this) {
       case Rating.veryBad:

@@ -68,6 +68,11 @@ class AddTaskOneTimeDoneState extends AddTaskCompleteState {
   @override
   void onGoNext(BuildContext context, AddTaskMediator mediator) {
     logger.i('AddTaskOneTimeDoneState.onGoNext');
+    if (_selected == null) {
+      logger.i('AddTaskOneTimeDoneState.onGoNext: _selected is null');
+      return;
+    }
+
     super.onGoNext(context, mediator);
   }
 }

@@ -1,4 +1,5 @@
 import 'package:do_something/src/features/add_task/add_task_page.dart';
+import 'package:do_something/src/theme/task_colors.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -53,17 +54,17 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
       children: [
         // Back button
         IconButton(
-          onPressed: () {
-            widget.onBack();
-          },
-          icon: Icon(widget.backIcon),
-        ),
+            onPressed: () {
+              widget.onBack();
+            },
+            icon: Icon(widget.backIcon),
+            color: AppTheme.appColors(context).primary),
         // Continue button
         AnimatedBuilder(
           animation: _controller,
           builder: (context, child) {
             return Transform.scale(
-              scale: _isCompleted() ? 1.0 + (_controller.value * 0.7) : 1.0,
+              scale: _isCompleted() ? 1.0 + (_controller.value * 0.1) : 1.0,
               child: child,
             );
           },
@@ -71,12 +72,10 @@ class _HeaderState extends State<Header> with SingleTickerProviderStateMixin {
             onPressed: () {
               widget.onContinue();
             },
-            icon: Icon(
-              _isCompleted() ? Icons.check : widget.continueIcon,
-            ),
+            icon: Icon(widget.continueIcon),
             color: _isCompleted()
-                ? AppTheme.appColors(context).systemBlue
-                : Colors.black,
+                ? AppTheme.appColors(context).primary
+                : AppTheme.appColors(context).secondary,
           ),
         ),
       ],

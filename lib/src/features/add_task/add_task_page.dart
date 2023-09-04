@@ -7,6 +7,10 @@ import 'package:do_something/src/features/add_task/states/add_task_rating_state.
 import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/header.dart';
+import 'package:do_something/src/features/add_task/widgets/progress_bar.dart';
+import 'package:do_something/src/mixings/fading_mixing.dart';
+import 'package:do_something/src/mixings/translate_mixing.dart';
+import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
@@ -19,16 +23,24 @@ class AddTaskPage extends StatefulWidget {
   State<AddTaskPage> createState() => _AddTaskPageState();
 }
 
-class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
+class _AddTaskPageState extends State<AddTaskPage>
+    with
+        TickerProviderStateMixin,
+        FadingMixin<AddTaskPage>,
+        TranslateMixing<AddTaskPage>
+    implements AddTaskMediator {
   Widget? childWidget;
 
   AddTaskBaseState get currentState => states[currentStateIndex];
 
   @override
   late TaskBuilder taskBuilder;
-
   late List<AddTaskBaseState> states;
   late int currentStateIndex;
+  late int currentStep;
+
+  final forwardTranslateAnimationOffset = const Offset(0.1, 0);
+  final backwardTranslateAnimationOffset = const Offset(-0.1, 0);
 
   CurrentStateStatus currentStateStatus = CurrentStateStatus.notCompleted;
 
@@ -60,25 +72,38 @@ class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
       AddTaskCompleteState(),
     ];
     currentStateIndex = -1;
+    currentStep = 0;
   }
 
   @override
   void transitionToNextState() {
+    translate(offset: backwardTranslateAnimationOffset);
+    fadeOut();
     if (currentStateIndex < states.length) {
       setState(() {
+        currentStep++;
         currentStateIndex++;
         currentState.apply(this);
       });
+
+      fadeIn();
+      translate(offset: forwardTranslateAnimationOffset);
     }
   }
 
   @override
   void transitionToPreviousState() {
+    translate(offset: forwardTranslateAnimationOffset);
+    fadeOut();
     if (currentStateIndex > 0) {
       setState(() {
+        currentStep--;
         currentStateIndex--;
         currentState.apply(this);
       });
+
+      fadeIn();
+      translate(offset: backwardTranslateAnimationOffset);
     }
   }
 
@@ -98,29 +123,41 @@ class _AddTaskPageState extends State<AddTaskPage> implements AddTaskMediator {
 
   @override
   Widget build(BuildContext context) {
-    // just a container with white background and a child is a header with back button and continue button
     return Scaffold(
-        body: Container(
-            constraints: const BoxConstraints.expand(),
-            color: Colors.white,
-            child: SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Header(
-                      onBack: () {
-                        _onBackButtonPressed(context);
-                      },
-                      onContinue: () {
-                        _onContiueButtonPressed(context);
-                      },
-                      status: currentStateStatus),
-                  childWidget != null
-                      ? Expanded(child: childWidget!)
-                      : const Spacer(),
-                ],
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        color: AppTheme.appColors(context).background,
+        child: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Header(
+                onBack: () {
+                  _onBackButtonPressed(context);
+                },
+                onContinue: () {
+                  _onContiueButtonPressed(context);
+                },
+                status: currentStateStatus,
               ),
-            )));
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                child: ProgressBar(
+                    numberOfSteps: states.length - 1, currentStep: currentStep),
+              ),
+              if (childWidget != null)
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: buildTranslable(buildFadable(childWidget!)),
+                )
+              else
+                const Spacer(),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -50,7 +50,8 @@ class _LuuSelectorState<T extends Identifiable> extends State<LuuSelector> {
           Padding(
               padding: const EdgeInsets.all(10),
               child: AutoSizeText(widget.label,
-                  maxLines: 1, style: AppTheme.textStyle(context).headline2)),
+                  maxLines: 1,
+                  style: AppTheme.textStyle(context).headlineMedium)),
           ...widget.items
               .map((item) => Padding(
                   padding: const EdgeInsets.all(10),

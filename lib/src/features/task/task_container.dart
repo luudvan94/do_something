@@ -3,15 +3,19 @@ import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/task_content.dart';
 import 'package:do_something/src/mixings/bouncing_mixing.dart';
 import 'package:do_something/src/mixings/dragging_mixing.dart';
+import 'package:do_something/src/theme/task_colors.dart';
 import 'package:flutter/material.dart';
-import 'package:do_something/src/features/task/rating.dart';
 
 class TaskContainer extends StatefulWidget {
   final Task task;
+  final TaskColor taskColor;
   final Function onHalfWidthReached;
 
   const TaskContainer(
-      {Key? key, required this.task, required this.onHalfWidthReached})
+      {Key? key,
+      required this.task,
+      required this.onHalfWidthReached,
+      required this.taskColor})
       : super(key: key);
 
   @override
@@ -24,10 +28,10 @@ class _TaskContainerState extends State<TaskContainer>
         BounceableMixin<TaskContainer>,
         DraggableMixing<TaskContainer> {
   double get horizontalDragLength => offset.dx;
+
   @override
   void initState() {
     super.initState();
-    initDraggingController();
   }
 
   @override
@@ -66,16 +70,19 @@ class _TaskContainerState extends State<TaskContainer>
                 color: Colors.black.withOpacity(adjustedOpacity),
                 spreadRadius: 5,
                 blurRadius: 7,
-                offset: Offset(0, 3), // changes position of shadow
+                offset: const Offset(0, 3), // changes position of shadow
               ),
             ],
           ),
           child: ClipPath(
             clipper: DragClipper(offset: offset),
             child: Container(
-              color: widget.task.ratingEnum.getColorFromTheme(context),
+              color: widget.taskColor.background,
               child: buildBounceable(
-                TaskContent(task: widget.task),
+                TaskContent(
+                  task: widget.task,
+                  taskColor: widget.taskColor,
+                ),
               ),
             ),
           ),

@@ -1,4 +1,6 @@
 // Package imports
+import 'package:do_something/src/mixings/fading_mixing.dart';
+import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 // Project imports
@@ -40,6 +42,8 @@ class _TextEditorState extends State<TextEditor> {
     if (widget.value.isNotEmpty) {
       _controller.text = widget.value;
     }
+
+    logger.i(widget.key);
   }
 
   @override
@@ -55,7 +59,7 @@ class _TextEditorState extends State<TextEditor> {
                 controller: _controller,
                 decoration: InputDecoration(
                   hintText: widget.placeholder,
-                  hintStyle: AppTheme.textStyle(context).headline2,
+                  hintStyle: AppTheme.textStyle(context).headlineMedium,
                   border: InputBorder.none,
                   isDense: true,
                 ),
@@ -63,7 +67,7 @@ class _TextEditorState extends State<TextEditor> {
                 minFontSize: minFontSize,
                 minLines: minLines,
                 fullwidth: true,
-                style: AppTheme.textStyle(context).headline2,
+                style: AppTheme.textStyle(context).headlineMedium,
                 textAlign: TextAlign.left,
                 textInputAction: TextInputAction.done,
                 wrapWords: true,

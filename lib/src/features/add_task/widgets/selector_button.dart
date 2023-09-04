@@ -1,4 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:do_something/src/theme/task_colors.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -31,20 +32,22 @@ class SelectorButton extends StatelessWidget {
               borderRadius: BorderRadius.circular(24),
               border: Border.all(
                 color: isSelected
-                    ? AppTheme.appColors(context).systemGrey
-                    : Colors.grey,
+                    ? AppTheme.appColors(context).primary
+                    : AppTheme.appColors(context).secondary,
                 width: 1,
               ),
-              color: isSelected ? AppTheme.appColors(context).systemGrey : null,
+              color: isSelected
+                  ? AppTheme.appColors(context).primary
+                  : AppTheme.appColors(context).background,
             ),
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
               child: AnimatedDefaultTextStyle(
                 style: isSelected
-                    ? AppTheme.textStyle(context).bodySmall!.copyWith(
-                          color: Colors.white,
+                    ? AppTheme.textStyle(context).bodyMedium!.copyWith(
+                          color: AppTheme.appColors(context).onPrimary,
                         )
-                    : AppTheme.textStyle(context).bodySmall!,
+                    : AppTheme.textStyle(context).bodyMedium!,
                 duration: const Duration(milliseconds: 100),
                 child: AutoSizeText(
                   label,

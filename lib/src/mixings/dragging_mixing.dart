@@ -6,6 +6,12 @@ mixin DraggableMixing<T extends StatefulWidget>
   late AnimationController _draggingController;
   late Animation<Offset> _draggingAnimation;
 
+  @override
+  void initState() {
+    super.initState();
+    initDraggingController();
+  }
+
   void initDraggingController() {
     _draggingController = AnimationController(
       duration: const Duration(milliseconds: 300),

@@ -2,11 +2,14 @@ import 'dart:math';
 
 import 'package:do_something/src/features/task/footer.dart';
 import 'package:do_something/src/features/task/header.dart';
+import 'package:do_something/src/features/task/no_task_available.dart';
 import 'package:do_something/src/features/task/not_dragging_task_container.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_state.dart';
 import 'package:do_something/src/features/task/task_container.dart';
 import 'package:do_something/src/redux/init_redux.dart';
+import 'package:do_something/src/theme/app_theme.dart';
+import 'package:do_something/src/theme/task_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -33,18 +36,33 @@ class _TaskPageState extends State<TaskPage> {
     return StoreConnector<AppState, TaskState>(
         converter: (store) => store.state.taskState,
         builder: (context, taskState) {
+          var currentTask = taskState.currentTask;
+          var nextTask = taskState.nextTask;
+          var currentTaskColor = TaskColorSet.set1;
+
           return Scaffold(
+            backgroundColor: AppTheme.appColors(context).background,
             body: Stack(
               children: [
+                nextTask == null && currentTask == null
+                    ? NoTaskAvailable(taskColor: AppTheme.appTaskColor(context))
+                    : const SizedBox.shrink(),
+
                 // NotDraggingTaskContainer
-                taskState.nextTask != null
-                    ? NotDraggingTaskContainer(task: taskState.nextTask!)
+                nextTask != null
+                    ? NotDraggingTaskContainer(
+                        task: nextTask,
+                        taskColor: currentTaskColor
+                            .colorFromRating(nextTask.ratingEnum),
+                      )
                     : const SizedBox.shrink(),
 
                 // TaskContainer
-                taskState.currentTask != null
+                currentTask != null
                     ? TaskContainer(
-                        task: taskState.currentTask!,
+                        task: currentTask,
+                        taskColor: currentTaskColor
+                            .colorFromRating(currentTask.ratingEnum),
                         onHalfWidthReached: () {
                           _handleHalfWidthReached();
                         })
@@ -55,20 +73,19 @@ class _TaskPageState extends State<TaskPage> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          child: Header(
-                            task: taskState.currentTask,
-                          ),
+                        Header(
+                          task: currentTask,
+                          taskColor: currentTask != null
+                              ? currentTaskColor
+                                  .colorFromRating(currentTask.ratingEnum)
+                              : AppTheme.appTaskColor(context),
                         ),
-                        taskState.currentTask != null
-                            ? Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Footer(task: taskState.currentTask!))
+                        currentTask != null
+                            ? Footer(
+                                task: currentTask,
+                                taskColor: currentTaskColor
+                                    .colorFromRating(currentTask.ratingEnum),
+                              )
                             : const SizedBox.shrink(),
                       ]),
                 )
