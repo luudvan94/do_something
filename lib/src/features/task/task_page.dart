@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/footer.dart';
 import 'package:do_something/src/features/task/header.dart';
 import 'package:do_something/src/features/task/no_task_available.dart';
@@ -84,59 +85,14 @@ class _TaskPageState extends State<TaskPage>
             backgroundColor: AppTheme.appColors(context).background,
             body: GestureDetector(
               onVerticalDragEnd: _handleSwipeUp,
-              onTap: () {
-                logger.i('Tapped on screen');
-              },
               child: buildScalable(Stack(children: [
                 Container(color: Colors.black),
                 Stack(
                   children: [
-                    nextTask == null && currentTask == null
-                        ? NoTaskAvailable(
-                            taskColor: AppTheme.appTaskColor(context))
-                        : const SizedBox.shrink(),
-                    // NoTaskAvailable(taskColor: AppTheme.appTaskColor(context)),
-                    // // NotDraggingTaskContainer
-                    nextTask != null
-                        ? NotDraggingTaskContainer(
-                            task: nextTask,
-                            taskColor: currentTaskColor
-                                .colorFromRating(nextTask.ratingEnum),
-                          )
-                        : const SizedBox.shrink(),
-
-                    // TaskContainer
-                    currentTask != null
-                        ? TaskContainer(
-                            task: currentTask,
-                            taskColor: currentTaskColor
-                                .colorFromRating(currentTask.ratingEnum),
-                            onHalfWidthReached: () {
-                              _handleHalfWidthReached();
-                            })
-                        : const SizedBox.shrink(),
-
-                    // Header at the top of the screen
-                    SafeArea(
-                      child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Header(
-                              task: currentTask,
-                              taskColor: currentTask != null
-                                  ? currentTaskColor
-                                      .colorFromRating(currentTask.ratingEnum)
-                                  : AppTheme.appTaskColor(context),
-                            ),
-                            currentTask != null
-                                ? Footer(
-                                    task: currentTask,
-                                    taskColor: currentTaskColor.colorFromRating(
-                                        currentTask.ratingEnum),
-                                  )
-                                : const SizedBox.shrink(),
-                          ]),
-                    )
+                    _buildBackgroundContent(
+                        currentTask, nextTask, currentTaskColor, context),
+                    _buildHeaderAndFooter(
+                        currentTask, currentTaskColor, context),
 
                     // Footer at bottom of the screen
                   ],
@@ -145,5 +101,46 @@ class _TaskPageState extends State<TaskPage>
             ),
           );
         });
+  }
+
+  Widget _buildBackgroundContent(Task? currentTask, Task? nextTask,
+      TaskColorSet currentTaskColor, BuildContext context) {
+    return Stack(
+      children: [
+        if (nextTask == null && currentTask == null)
+          NoTaskAvailable(taskColor: AppTheme.appTaskColor(context)),
+        if (nextTask != null)
+          NotDraggingTaskContainer(
+            task: nextTask,
+            taskColor: currentTaskColor.colorFromRating(nextTask.ratingEnum),
+          ),
+        if (currentTask != null)
+          TaskContainer(
+            task: currentTask,
+            taskColor: currentTaskColor.colorFromRating(currentTask.ratingEnum),
+            onHalfWidthReached: () => _handleHalfWidthReached(),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildHeaderAndFooter(
+      Task? currentTask, TaskColorSet currentTaskColor, BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Header(
+          task: currentTask,
+          taskColor: currentTask != null
+              ? currentTaskColor.colorFromRating(currentTask.ratingEnum)
+              : AppTheme.appTaskColor(context),
+        ),
+        if (currentTask != null)
+          Footer(
+            task: currentTask,
+            taskColor: currentTaskColor.colorFromRating(currentTask.ratingEnum),
+          ),
+      ],
+    );
   }
 }

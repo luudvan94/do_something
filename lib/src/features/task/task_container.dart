@@ -5,6 +5,8 @@ import 'package:do_something/src/mixings/bouncing_mixing.dart';
 import 'package:do_something/src/mixings/dragging_mixing.dart';
 import 'package:do_something/src/mixings/scaling_mixing.dart';
 import 'package:do_something/src/theme/task_colors.dart';
+import 'package:do_something/src/utils/constants.dart';
+import 'package:do_something/src/utils/helpers.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
@@ -52,27 +54,23 @@ class _TaskContainerState extends State<TaskContainer>
   }
 
   void _tapDownHandler(TapDownDetails details) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final Size screenSize = MediaQuery.of(context).size;
+    final Offset tapPosition = details.localPosition;
 
-    // Define a "center area" threshold, e.g., 20% of screen dimensions
-    double horizontalThreshold = screenWidth * 0.2;
-    double verticalThreshold = screenHeight * 0.2;
+    final Rect centerArea = calculateCenterArea(
+      screenSize,
+      Constants.VERTICAL_THRESHOLD_PERCENTAGE,
+      Constants.VERTICAL_THRESHOLD_PERCENTAGE,
+    );
 
-    // Calculate the center area boundaries
-    double horizontalCenterStart = (screenWidth - horizontalThreshold) / 2;
-    double horizontalCenterEnd = (screenWidth + horizontalThreshold) / 2;
-    double verticalCenterStart = (screenHeight - verticalThreshold) / 2;
-    double verticalCenterEnd = (screenHeight + verticalThreshold) / 2;
-
-    // Check if the tap is within the center area
-    if (details.localPosition.dx >= horizontalCenterStart &&
-        details.localPosition.dx <= horizontalCenterEnd &&
-        details.localPosition.dy >= verticalCenterStart &&
-        details.localPosition.dy <= verticalCenterEnd) {
+    if (_isTapWithinCenterArea(tapPosition, centerArea)) {
       logger.i('Tap is within the center area');
       scalingController.forward(from: 0.0);
     }
+  }
+
+  bool _isTapWithinCenterArea(Offset tapPosition, Rect centerArea) {
+    return centerArea.contains(tapPosition);
   }
 
   @override
@@ -91,29 +89,28 @@ class _TaskContainerState extends State<TaskContainer>
         onPanStart: handlePanStart,
         onPanUpdate: handlePanUpdate,
         onPanEnd: handlePanEnd,
-        child: Container(
-          decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(adjustedOpacity),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          child: buildScalable(ClipPath(
-            clipper: DragClipper(offset: offset),
-            child: Container(
-              color: widget.taskColor.background,
-              child: buildBounceable(
-                TaskContent(
-                  task: widget.task,
-                  taskColor: widget.taskColor,
+        child: Stack(
+          children: [
+            _buildShadowContainer(adjustedOpacity),
+            buildScalable(ClipPath(
+              clipper: DragClipper(offset: offset),
+              child: Container(
+                color: widget.taskColor.background,
+                child: buildBounceable(
+                  TaskContent(
+                    task: widget.task,
+                    taskColor: widget.taskColor,
+                  ),
                 ),
               ),
-            ),
-          )),
+            ))
+          ],
         ));
+  }
+
+  Widget _buildShadowContainer(double opacity) {
+    return Container(
+      color: Colors.black.withOpacity(opacity),
+    );
   }
 }
