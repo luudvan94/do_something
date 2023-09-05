@@ -2,6 +2,7 @@ import 'package:do_something/src/features/task/anki/anki_task_manager.dart';
 import 'package:do_something/src/features/task/anki/task_manager.dart';
 import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/utils/date.dart';
+import 'package:do_something/src/utils/hive.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:hive/hive.dart';
 
@@ -39,8 +40,9 @@ var tasksKey = 'tasksKey';
 var currentTaskIdKey = 'currentTaskIdKey';
 var checkInDateKey = 'checkInDateKey';
 
-TaskState loadTaskState(Box box) {
+Future<TaskState> loadTaskState(String boxName) async {
   logger.i('Loading task from Hive');
+  var box = await openBox(boxName);
   var dynamicList = box.get(tasksKey, defaultValue: []) as List;
   var tasks = dynamicList.cast<Task>();
 

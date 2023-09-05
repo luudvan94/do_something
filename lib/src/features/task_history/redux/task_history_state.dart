@@ -1,13 +1,17 @@
 import 'package:do_something/src/features/models/task_history.dart';
-import 'package:do_something/src/utils/logger.dart';
+import 'package:do_something/src/utils/hive.dart';
 import 'package:hive/hive.dart';
 
 var taskHistoryStateKeyBox = 'taskHistoryStateKeyBox';
 
 class TaskHistoryState {
+  final String? taskId;
   List<TaskHistory> histories;
 
-  TaskHistoryState({required this.histories});
+  TaskHistoryState({
+    required this.histories,
+    this.taskId,
+  });
 
   List<TaskHistory> findHistoriesByTaskId(String taskId) {
     return histories.where((history) => history.taskId == taskId).toList();
@@ -15,9 +19,11 @@ class TaskHistoryState {
 
   // add copyWith function
   TaskHistoryState copyWith({
+    String? taskId,
     List<TaskHistory>? histories,
   }) {
     var copy = TaskHistoryState(
+      taskId: taskId,
       histories: histories ?? this.histories,
     );
 
@@ -26,10 +32,9 @@ class TaskHistoryState {
 }
 
 var defaultTaskHistoryState = TaskHistoryState(histories: []);
-var taskHistoryKey = 'taskHistoryKey';
-TaskHistoryState loadTaskHistoryState(Box box) {
-  logger.i('Loading task history from Hive');
-  var dynamic = box.get(taskHistoryKey, defaultValue: []) as List;
-  var histories = dynamic.cast<TaskHistory>();
-  return TaskHistoryState(histories: histories);
+
+Future<TaskHistoryState> loadTaskHistoryState(String boxName) async {
+  await openBox(boxName);
+  //we're gonna load history datas on user's request
+  return defaultTaskHistoryState;
 }

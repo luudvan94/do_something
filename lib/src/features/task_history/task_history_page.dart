@@ -1,3 +1,4 @@
+import 'package:do_something/src/features/task_history/widgets/task_history_list.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -36,23 +37,21 @@ class _TaskHistoryPageState extends State<TaskHistoryPage> {
               onTap: () {
                 widget.onDismissed(context);
               },
-              child: Container(
-                height: MediaQuery.of(context).size.height / 7,
-                color: Colors.transparent,
-              ),
+              child: _buildSpacer(),
             ),
             Expanded(
-              child: Container(
-                color: AppTheme.appColors(context).background.withOpacity(1),
-                child: Center(
-                  child: Text('Task History',
-                      style: Theme.of(context).textTheme.headline1),
-                ),
-              ),
+              child: TaskHistoryList(taskHistories: []),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSpacer() {
+    return Container(
+      height: MediaQuery.of(context).size.height / 7,
+      color: Colors.transparent,
     );
   }
 }

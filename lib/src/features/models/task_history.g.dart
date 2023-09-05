@@ -20,13 +20,16 @@ class TaskHistoryAdapter extends TypeAdapter<TaskHistory> {
       id: fields[0] as String,
       taskId: fields[1] as String,
       doneDate: fields[2] as DateTime,
-    )..description = fields[3] as String?;
+      historyTypeId: fields[4] as String,
+      typeString: fields[3] as String,
+      detailsJsonString: fields[5] as String,
+    );
   }
 
   @override
   void write(BinaryWriter writer, TaskHistory obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -34,7 +37,11 @@ class TaskHistoryAdapter extends TypeAdapter<TaskHistory> {
       ..writeByte(2)
       ..write(obj.doneDate)
       ..writeByte(3)
-      ..write(obj.description);
+      ..write(obj.typeString)
+      ..writeByte(4)
+      ..write(obj.historyTypeId)
+      ..writeByte(5)
+      ..write(obj.detailsJsonString);
   }
 
   @override

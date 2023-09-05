@@ -7,11 +7,10 @@ import 'package:do_something/src/features/task_history/redux/task_history_action
 import 'package:do_something/src/features/task_history/redux/task_history_middleware.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_reducer.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_state.dart';
+import 'package:do_something/src/utils/constants.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:redux/redux.dart';
-
-var appBoxName = 'doSomgthingAppBox';
 
 class AppState {
   TaskState taskState;
@@ -39,9 +38,8 @@ Future<Store<AppState>> initializeRedux() async {
   logger.i('Initializing Hive');
   Hive.registerAdapter(TaskAdapter());
 
-  var box = await Hive.openBox(appBoxName);
-  var taskState = loadTaskState(box);
-  var taskHistoryState = loadTaskHistoryState(box);
+  var taskState = await loadTaskState(Constants.taskBoxName);
+  var taskHistoryState = await loadTaskHistoryState(Constants.historyBoxName);
 
   var loadedState =
       AppState(taskState: taskState, taskHistoryState: taskHistoryState);

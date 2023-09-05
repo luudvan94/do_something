@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/footer.dart';
 import 'package:do_something/src/features/task/header.dart';
@@ -126,7 +124,8 @@ class _TaskPageState extends State<TaskPage>
 
   Widget _buildHeaderAndFooter(
       Task? currentTask, TaskColorSet currentTaskColor, BuildContext context) {
-    return Column(
+    return SafeArea(
+        child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Header(
@@ -141,6 +140,6 @@ class _TaskPageState extends State<TaskPage>
             taskColor: currentTaskColor.colorFromRating(currentTask.ratingEnum),
           ),
       ],
-    );
+    ));
   }
 }

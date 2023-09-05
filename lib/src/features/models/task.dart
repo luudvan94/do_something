@@ -1,6 +1,7 @@
 // create Task model with id, name
 import 'package:do_something/src/features/models/rating.dart';
 import 'package:hive/hive.dart';
+import 'dart:convert';
 
 part 'task.g.dart';
 
@@ -46,6 +47,30 @@ class Task extends HiveObject {
   String toString() {
     // print task object
     return 'Task{id: $id, name: $name, isOneTimeDone: $isOneTimeDone, rating: $rating, reviewDate: $reviewDate, ignoreCountLeft: $ignoreCountLeft, doneCount: $doneCount}';
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'isOneTimeDone': isOneTimeDone,
+      'rating': rating,
+      'reviewDate': reviewDate.toIso8601String(),
+      'ignoreCountLeft': ignoreCountLeft,
+      'doneCount': doneCount,
+    };
+  }
+
+  static Task fromJson(Map<String, dynamic> json) {
+    return Task(
+      id: json['id'],
+      name: json['name'],
+      isOneTimeDone: json['isOneTimeDone'],
+      rating: json['rating'],
+      reviewDate: DateTime.parse(json['reviewDate']),
+      ignoreCountLeft: json['ignoreCountLeft'],
+      doneCount: json['doneCount'],
+    );
   }
 }
 

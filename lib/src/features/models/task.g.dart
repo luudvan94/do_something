@@ -23,7 +23,8 @@ class TaskAdapter extends TypeAdapter<Task> {
       reviewDate: fields[4] as DateTime,
       doneCount: fields[6] as int,
       isOneTimeDone: fields[2] as bool,
-    )..ignoreCountLeft = fields[5] as int;
+      ignoreCountLeft: fields[5] as int,
+    );
   }
 
   @override

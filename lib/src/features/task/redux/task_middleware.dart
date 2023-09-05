@@ -1,6 +1,7 @@
 import 'package:do_something/src/features/task/redux/task_state.dart';
 import 'package:do_something/src/redux/init_redux.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
+import 'package:do_something/src/utils/constants.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:hive/hive.dart';
 import 'package:redux/redux.dart';
@@ -30,7 +31,7 @@ class TaskSaver {
   const TaskSaver._();
 
   void saveTasks(Store<AppState> store) {
-    var box = Hive.box(appBoxName);
+    var box = Hive.box(Constants.taskBoxName);
     box.put(tasksKey, store.state.taskState.tasks);
   }
 }
