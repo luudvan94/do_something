@@ -1,7 +1,7 @@
 import 'package:do_something/src/features/task/anki/anki_task_manager.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:do_something/src/features/models/task.dart';
-import 'package:do_something/src/features/task/rating.dart';
+import 'package:do_something/src/features/models/rating.dart';
 
 void main() {
   group('AnkiTaskManager', () {

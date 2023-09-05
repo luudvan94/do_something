@@ -1,6 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:do_something/src/features/add_task/widgets/selector_button.dart';
-import 'package:do_something/src/features/task/rating.dart';
+import 'package:do_something/src/features/models/rating.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';

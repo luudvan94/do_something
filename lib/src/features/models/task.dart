@@ -1,5 +1,5 @@
 // create Task model with id, name
-import 'package:do_something/src/features/task/rating.dart';
+import 'package:do_something/src/features/models/rating.dart';
 import 'package:hive/hive.dart';
 
 part 'task.g.dart';

@@ -1,4 +1,4 @@
-import 'package:do_something/src/features/task/rating.dart';
+import 'package:do_something/src/features/models/rating.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_middleware.dart';
 import 'package:do_something/src/features/models/task.dart';

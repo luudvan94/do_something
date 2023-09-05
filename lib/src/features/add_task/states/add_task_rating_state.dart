@@ -2,7 +2,7 @@ import 'package:do_something/src/features/add_task/add_task_page.dart';
 import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/luu_selector.dart';
-import 'package:do_something/src/features/task/rating.dart';
+import 'package:do_something/src/features/models/rating.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
