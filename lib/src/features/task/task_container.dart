@@ -3,7 +3,9 @@ import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/task_content.dart';
 import 'package:do_something/src/mixings/bouncing_mixing.dart';
 import 'package:do_something/src/mixings/dragging_mixing.dart';
+import 'package:do_something/src/mixings/scaling_mixing.dart';
 import 'package:do_something/src/theme/task_colors.dart';
+import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 class TaskContainer extends StatefulWidget {
@@ -26,12 +28,14 @@ class _TaskContainerState extends State<TaskContainer>
     with
         TickerProviderStateMixin,
         BounceableMixin<TaskContainer>,
-        DraggableMixing<TaskContainer> {
+        DraggableMixing<TaskContainer>,
+        ScalingMixin<TaskContainer> {
   double get horizontalDragLength => offset.dx;
 
   @override
   void initState() {
     super.initState();
+    initScaling(1.0, 0.97, shouldReverse: true, duration: 150);
   }
 
   @override
@@ -47,7 +51,30 @@ class _TaskContainerState extends State<TaskContainer>
     startDraggingEffect();
   }
 
-  @override
+  void _tapDownHandler(TapDownDetails details) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Define a "center area" threshold, e.g., 20% of screen dimensions
+    double horizontalThreshold = screenWidth * 0.2;
+    double verticalThreshold = screenHeight * 0.2;
+
+    // Calculate the center area boundaries
+    double horizontalCenterStart = (screenWidth - horizontalThreshold) / 2;
+    double horizontalCenterEnd = (screenWidth + horizontalThreshold) / 2;
+    double verticalCenterStart = (screenHeight - verticalThreshold) / 2;
+    double verticalCenterEnd = (screenHeight + verticalThreshold) / 2;
+
+    // Check if the tap is within the center area
+    if (details.localPosition.dx >= horizontalCenterStart &&
+        details.localPosition.dx <= horizontalCenterEnd &&
+        details.localPosition.dy >= verticalCenterStart &&
+        details.localPosition.dy <= verticalCenterEnd) {
+      logger.i('Tap is within the center area');
+      scalingController.forward(from: 0.0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double halfScreenWidth = MediaQuery.of(context).size.width / 2;
@@ -60,6 +87,7 @@ class _TaskContainerState extends State<TaskContainer>
     double adjustedOpacity = 1.0 - scaledOffset;
 
     return GestureDetector(
+        onTapDown: _tapDownHandler,
         onPanStart: handlePanStart,
         onPanUpdate: handlePanUpdate,
         onPanEnd: handlePanEnd,
@@ -74,7 +102,7 @@ class _TaskContainerState extends State<TaskContainer>
               ),
             ],
           ),
-          child: ClipPath(
+          child: buildScalable(ClipPath(
             clipper: DragClipper(offset: offset),
             child: Container(
               color: widget.taskColor.background,
@@ -85,7 +113,7 @@ class _TaskContainerState extends State<TaskContainer>
                 ),
               ),
             ),
-          ),
+          )),
         ));
   }
 }

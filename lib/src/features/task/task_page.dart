@@ -7,9 +7,12 @@ import 'package:do_something/src/features/task/not_dragging_task_container.dart'
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_state.dart';
 import 'package:do_something/src/features/task/task_container.dart';
+import 'package:do_something/src/features/task_history/task_history_page.dart';
+import 'package:do_something/src/mixings/scaling_mixing.dart';
 import 'package:do_something/src/redux/init_redux.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/theme/task_colors.dart';
+import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
@@ -20,15 +23,52 @@ class TaskPage extends StatefulWidget {
   State<TaskPage> createState() => _TaskPageState();
 }
 
-class _TaskPageState extends State<TaskPage> {
+class _TaskPageState extends State<TaskPage>
+    with TickerProviderStateMixin, ScalingMixin<TaskPage> {
   @override
   void initState() {
     super.initState();
+    initScaling(1.0, 0.85, shouldReverse: false, duration: 300);
   }
 
   void _handleHalfWidthReached() {
     var store = StoreProvider.of<AppState>(context);
     store.dispatch(NextTaskAction(store.state.taskState.currentTask!));
+  }
+
+  void _handleSwipeUp(DragEndDetails details) {
+    logger.i('Swipe up velocity: ${details.primaryVelocity}');
+    scalingController.forward(from: 0.0);
+    _openTaskHistory();
+  }
+
+  void _openTaskHistory() {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          // Apply curve to the animation
+          var curvedAnimation = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeInOut,
+          );
+
+          return FadeTransition(
+            opacity: curvedAnimation,
+            child: TaskHistoryPage(
+              animation: curvedAnimation,
+              onDismissed: _onTaskHistoryPageDismissedHandler,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _onTaskHistoryPageDismissedHandler(BuildContext context) {
+    logger.i('Task history page dismissed');
+    Navigator.of(context).pop();
+    scalingController.reverse();
   }
 
   @override
@@ -42,56 +82,66 @@ class _TaskPageState extends State<TaskPage> {
 
           return Scaffold(
             backgroundColor: AppTheme.appColors(context).background,
-            body: Stack(
-              children: [
-                nextTask == null && currentTask == null
-                    ? NoTaskAvailable(taskColor: AppTheme.appTaskColor(context))
-                    : const SizedBox.shrink(),
+            body: GestureDetector(
+              onVerticalDragEnd: _handleSwipeUp,
+              onTap: () {
+                logger.i('Tapped on screen');
+              },
+              child: buildScalable(Stack(children: [
+                Container(color: Colors.black),
+                Stack(
+                  children: [
+                    nextTask == null && currentTask == null
+                        ? NoTaskAvailable(
+                            taskColor: AppTheme.appTaskColor(context))
+                        : const SizedBox.shrink(),
+                    // NoTaskAvailable(taskColor: AppTheme.appTaskColor(context)),
+                    // // NotDraggingTaskContainer
+                    nextTask != null
+                        ? NotDraggingTaskContainer(
+                            task: nextTask,
+                            taskColor: currentTaskColor
+                                .colorFromRating(nextTask.ratingEnum),
+                          )
+                        : const SizedBox.shrink(),
 
-                // NotDraggingTaskContainer
-                nextTask != null
-                    ? NotDraggingTaskContainer(
-                        task: nextTask,
-                        taskColor: currentTaskColor
-                            .colorFromRating(nextTask.ratingEnum),
-                      )
-                    : const SizedBox.shrink(),
+                    // TaskContainer
+                    currentTask != null
+                        ? TaskContainer(
+                            task: currentTask,
+                            taskColor: currentTaskColor
+                                .colorFromRating(currentTask.ratingEnum),
+                            onHalfWidthReached: () {
+                              _handleHalfWidthReached();
+                            })
+                        : const SizedBox.shrink(),
 
-                // TaskContainer
-                currentTask != null
-                    ? TaskContainer(
-                        task: currentTask,
-                        taskColor: currentTaskColor
-                            .colorFromRating(currentTask.ratingEnum),
-                        onHalfWidthReached: () {
-                          _handleHalfWidthReached();
-                        })
-                    : const SizedBox.shrink(),
+                    // Header at the top of the screen
+                    SafeArea(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Header(
+                              task: currentTask,
+                              taskColor: currentTask != null
+                                  ? currentTaskColor
+                                      .colorFromRating(currentTask.ratingEnum)
+                                  : AppTheme.appTaskColor(context),
+                            ),
+                            currentTask != null
+                                ? Footer(
+                                    task: currentTask,
+                                    taskColor: currentTaskColor.colorFromRating(
+                                        currentTask.ratingEnum),
+                                  )
+                                : const SizedBox.shrink(),
+                          ]),
+                    )
 
-                // Header at the top of the screen
-                SafeArea(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Header(
-                          task: currentTask,
-                          taskColor: currentTask != null
-                              ? currentTaskColor
-                                  .colorFromRating(currentTask.ratingEnum)
-                              : AppTheme.appTaskColor(context),
-                        ),
-                        currentTask != null
-                            ? Footer(
-                                task: currentTask,
-                                taskColor: currentTaskColor
-                                    .colorFromRating(currentTask.ratingEnum),
-                              )
-                            : const SizedBox.shrink(),
-                      ]),
+                    // Footer at bottom of the screen
+                  ],
                 )
-
-                // Footer at bottom of the screen
-              ],
+              ])),
             ),
           );
         });
