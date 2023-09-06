@@ -1,4 +1,3 @@
-import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 const animationDurationInMilliseconds = 100;

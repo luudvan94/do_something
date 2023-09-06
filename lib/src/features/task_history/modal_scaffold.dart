@@ -21,9 +21,9 @@ class ModalScaffold extends StatefulWidget {
 class _ModalScaffoldState extends State<ModalScaffold> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: widget.spacerColor,
-      body: Column(
+    return Container(
+      color: widget.spacerColor,
+      child: Column(
         children: [
           GestureDetector(
             onTap: () {

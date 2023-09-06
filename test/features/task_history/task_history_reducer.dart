@@ -18,8 +18,8 @@ void main() {
       final newHistory = TaskHistory(
           taskId: 'test1',
           doneDate: DateTime.now(),
-          typeString: HistoryType.create.toName(),
-          detailsJsonString: 'detailsJsonString');
+          typeString: 'some_type',
+          details: HistoryTypeUpdateDetails(differences: []));
       final action = AddTaskHistoryAction(newHistory);
 
       final newState = taskHistoryReducer(initialState, action);
@@ -34,10 +34,11 @@ void main() {
       final action = LoadHistoriesAction('some_task_id');
       final mockBox = MockBox();
       final loadedHistory = TaskHistory(
-          taskId: 'some_task_id',
-          doneDate: DateTime.now(),
-          typeString: 'some_type',
-          detailsJsonString: 'detailsJsonString');
+        taskId: 'some_task_id',
+        doneDate: DateTime.now(),
+        typeString: 'some_type',
+        details: HistoryTypeUpdateDetails(differences: []),
+      );
 
       when(mockBox.get(any, defaultValue: anyNamed('defaultValue')))
           .thenReturn([

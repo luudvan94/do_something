@@ -1,5 +1,4 @@
 // Package imports
-import 'package:do_something/src/mixings/fading_mixing.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +7,7 @@ import 'package:do_something/auto_size_text_field.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 
 // Meaningful constants
-const double minFontSize = 50;
+const double minFontSize = 30;
 const int minLines = 1;
 const int maxLines = 10;
 

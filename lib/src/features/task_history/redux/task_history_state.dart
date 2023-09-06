@@ -1,6 +1,5 @@
 import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/utils/hive.dart';
-import 'package:hive/hive.dart';
 
 var taskHistoryStateKeyBox = 'taskHistoryStateKeyBox';
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task.dart';
+import 'package:do_something/src/utils/logger.dart';
 
 class TaskHistory<T extends HistoryTypeDetails> {
   String id;
@@ -43,6 +44,7 @@ class TaskHistory<T extends HistoryTypeDetails> {
 
   static T detailsFromJson<T extends HistoryTypeDetails>(
       Map<String, dynamic> jsonMap, HistoryType type) {
+    logger.i(type);
     switch (type) {
       case HistoryType.complete:
         return HistoryTypeCompleteDetails.fromJson(jsonMap) as T;
@@ -58,13 +60,15 @@ class TaskHistory<T extends HistoryTypeDetails> {
   }
 
   static TaskHistory fromJson(Map<String, dynamic> json) {
+    logger.i(json['typeString'] as String);
+
     return TaskHistory(
       id: json['id'],
       taskId: json['taskId'],
       doneDate: DateTime.parse(json['doneDate']),
-      typeString: json['typeString'],
-      details: detailsFromJson(
-          json['details'], HistoryTypeExtension.fromName(json['typeString'])),
+      typeString: 'create',
+      details: detailsFromJson(jsonDecode(json['details']),
+          HistoryTypeExtension.fromName(json['typeString'] as String)),
     );
   }
 

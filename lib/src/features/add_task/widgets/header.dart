@@ -1,5 +1,4 @@
 import 'package:do_something/src/features/add_task/add_task_page.dart';
-import 'package:do_something/src/theme/task_colors.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 

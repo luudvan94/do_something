@@ -1,6 +1,5 @@
 import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task_history.dart';
-import 'package:do_something/src/features/task_history/widgets/task_history_detail.dart';
 import 'package:do_something/src/features/task_history/widgets/task_history_cell.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';

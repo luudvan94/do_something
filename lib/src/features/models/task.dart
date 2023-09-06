@@ -28,6 +28,9 @@ class Task extends HiveObject {
   @HiveField(6)
   int doneCount = 0;
 
+  @HiveField(7)
+  String details = '';
+
   Rating get ratingEnum => RatingExtension.fromName(rating);
 
   // constructor
@@ -38,7 +41,8 @@ class Task extends HiveObject {
       required this.reviewDate,
       required this.doneCount,
       this.isOneTimeDone = false,
-      this.ignoreCountLeft = 3}) {
+      this.ignoreCountLeft = 3,
+      this.details = ''}) {
     id = id.isEmpty ? DateTime.now().toString() : id;
     rating = rating.isEmpty ? Rating.neutral.toName() : rating;
   }
@@ -53,6 +57,7 @@ class Task extends HiveObject {
     return jsonEncode({
       'id': id,
       'name': name,
+      'details': details,
       'isOneTimeDone': isOneTimeDone,
       'rating': rating,
       'reviewDate': reviewDate.toIso8601String(),
@@ -65,6 +70,7 @@ class Task extends HiveObject {
     return Task(
       id: json['id'],
       name: json['name'],
+      details: json['details'],
       isOneTimeDone: json['isOneTimeDone'],
       rating: json['rating'],
       reviewDate: DateTime.parse(json['reviewDate']),

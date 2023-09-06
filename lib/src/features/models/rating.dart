@@ -1,6 +1,8 @@
 // colors extention based on rating
-import 'package:do_something/src/theme/task_colors.dart';
-import 'package:flutter/material.dart';
+
+abstract class StringRepresentable {
+  String toStringRepresentation();
+}
 
 enum Rating { veryBad, bad, neutral, good, veryGood }
 

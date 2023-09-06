@@ -60,10 +60,10 @@ class TaskHistoryCell extends StatelessWidget {
             ],
           ),
         ),
-        const Padding(
-          padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
           child: Divider(
-            color: Colors.grey,
+            color: AppTheme.appColors(context).secondary,
             thickness: 1,
           ),
         ),
@@ -96,14 +96,12 @@ class TaskHistoryCell extends StatelessWidget {
   Widget _historyTypeBuilder(BuildContext context, HistoryType type) {
     switch (type) {
       case HistoryType.create:
-        return _tagBuilder(context, 'creation', Colors.green,
-            AppTheme.appColors(context).onBackground);
+        return _tagBuilder(
+            context, 'creation', Colors.green[700]!, Colors.white);
       case HistoryType.update:
-        return _tagBuilder(context, 'update', Colors.blue,
-            AppTheme.appColors(context).onBackground);
+        return _tagBuilder(context, 'update', Colors.blue[700]!, Colors.white);
       case HistoryType.delete:
-        return _tagBuilder(context, 'deletion', Colors.red,
-            AppTheme.appColors(context).onBackground);
+        return _tagBuilder(context, 'deletion', Colors.red[700]!, Colors.white);
       default:
         return const SizedBox.shrink();
     }
@@ -123,7 +121,7 @@ class TaskHistoryCell extends StatelessWidget {
         tagName,
         AppTheme.textStyle(context)
             .bodySmall!
-            .copyWith(color: textColor, fontWeight: FontWeight.normal),
+            .copyWith(color: textColor, fontWeight: FontWeight.w300),
       ),
     );
   }

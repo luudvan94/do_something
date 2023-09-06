@@ -59,10 +59,11 @@ class _TaskPageState extends State<TaskPage>
         opaque: false,
         pageBuilder: (context, animation, secondaryAnimation) {
           // Apply curve to the animation
-          var curvedAnimation = CurvedAnimation(
+          var curvedAnimation =
+              Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
             parent: animation,
-            curve: Curves.easeInOut,
-          );
+            curve: Curves.easeIn,
+          ));
 
           return FadeTransition(
             opacity: curvedAnimation,
@@ -89,7 +90,7 @@ class _TaskPageState extends State<TaskPage>
         builder: (context, taskState) {
           var currentTask = taskState.currentTask;
           var nextTask = taskState.nextTask;
-          var currentTaskColor = TaskColorSet.set3;
+          var currentTaskColor = TaskColorSet.set1;
 
           return Scaffold(
             backgroundColor: AppTheme.appColors(context).background,

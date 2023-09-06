@@ -29,13 +29,13 @@ class AppTheme {
 }
 
 extension FontWeightExtension on FontWeight {
-  static const normal = FontWeight.w200;
+  static const normal = FontWeight.w300;
 }
 
 TextTheme _textTheme(ColorScheme colorScheme) {
   return TextTheme(
     headlineMedium: TextStyle(
-      fontSize: 48,
+      fontSize: 30,
       fontWeight: FontWeightExtension.normal,
       color: colorScheme.onBackground,
     ),
@@ -57,13 +57,10 @@ TextTheme _textTheme(ColorScheme colorScheme) {
   );
 }
 
-ColorScheme _colorScheme(
-    {ColorSwatch primarySwatch = Colors.blueGrey,
-    Color accentColor = Colors.white70,
-    Brightness brightness = Brightness.light}) {
+ColorScheme _colorScheme({Brightness brightness = Brightness.light}) {
   return ColorScheme(
-    primary: primarySwatch,
-    secondary: accentColor,
+    primary: Colors.blueGrey,
+    secondary: Colors.blueGrey[200]!,
     surface: Colors.white,
     background: brightness == Brightness.light ? Colors.white : Colors.black87,
     error: Colors.red,

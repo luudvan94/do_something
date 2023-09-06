@@ -1,6 +1,5 @@
 import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
-import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_actions.dart';

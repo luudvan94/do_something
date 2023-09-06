@@ -6,8 +6,8 @@ import 'package:do_something/src/features/task_history/redux/task_history_state.
 
 var mockTask = TaskExtension.fromName('test1', Rating.neutral);
 var mockDifferences = [
-  TaskDifference<String>('old name', 'new name'),
-  TaskDifference<Rating>(Rating.bad, Rating.good),
+  TaskDifference('old name', 'new name'),
+  TaskDifference(Rating.bad.toName(), Rating.good.toName()),
 ];
 
 TaskHistoryState mockTaskHistoryState =

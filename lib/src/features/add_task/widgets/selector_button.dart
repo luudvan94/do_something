@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:do_something/src/theme/task_colors.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
@@ -51,8 +50,8 @@ class SelectorButton extends StatelessWidget {
                 duration: const Duration(milliseconds: 100),
                 child: AutoSizeText(
                   label,
-                  maxFontSize: 100,
-                  minFontSize: 32,
+                  maxFontSize: 30,
+                  minFontSize: 24,
                   wrapWords: false,
                   maxLines: 1,
                 ),

@@ -19,9 +19,9 @@ extension HistoryTypeExtension on HistoryType {
   }
 }
 
-class TaskDifference<T> {
-  final T oldValue;
-  final T newValue;
+class TaskDifference {
+  final String oldValue;
+  final String newValue;
 
   TaskDifference(this.oldValue, this.newValue);
 }
@@ -87,7 +87,7 @@ class HistoryTypeCreateDetails implements HistoryTypeDetails {
   factory HistoryTypeCreateDetails.fromJson(Map<String, dynamic> json) {
     return HistoryTypeCreateDetails(
       id: json['id'],
-      task: Task.fromJson(json['task']),
+      task: Task.fromJson(jsonDecode(json['task'])),
     );
   }
 
