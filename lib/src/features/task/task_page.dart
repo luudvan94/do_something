@@ -73,7 +73,6 @@ class _TaskPageState extends State<TaskPage>
 
   void _onTaskHistoryPageDismissedHandler(BuildContext context) {
     logger.i('Task history page dismissed');
-    // Navigator.of(context).popUntil((route) => route.isFirst);
     scalingController.reverse();
   }
 

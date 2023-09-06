@@ -3,11 +3,14 @@ import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/features/task_history/modal_scaffold.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_actions.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_state.dart';
-import 'package:do_something/src/features/task_history/task_history_detail_page.dart';
+import 'package:do_something/src/features/task_history/widgets/task_history_detail.dart';
 import 'package:do_something/src/features/task_history/widgets/task_history_list.dart';
+import 'package:do_something/src/mixings/translate_mixing.dart';
 import 'package:do_something/src/redux/init_redux.dart';
+import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 
 typedef CallbackAction = void Function(BuildContext context);
@@ -28,7 +31,15 @@ class TaskHistoryPage extends StatefulWidget {
   State<TaskHistoryPage> createState() => _TaskHistoryPageState();
 }
 
-class _TaskHistoryPageState extends State<TaskHistoryPage> {
+class _TaskHistoryPageState extends State<TaskHistoryPage>
+    with TickerProviderStateMixin {
+  late AnimationController _historyListController;
+  late Animation<Offset> _historyListAnimation;
+  late AnimationController _historyDetailController;
+  late Animation<Offset> _historyDetailAnimation;
+  bool isHistoryDetailPresenting = false;
+  TaskHistory? selectedTaskHistory;
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +47,43 @@ class _TaskHistoryPageState extends State<TaskHistoryPage> {
     Future.delayed(Duration.zero, () {
       _loadHistories();
     });
+
+    _initHistoryListAnimation();
+    _initHistoryDetailAnimation();
+  }
+
+  void _initHistoryListAnimation() {
+    _historyListController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _historyListAnimation = Tween<Offset>(
+      begin: const Offset(0, 0),
+      end: Offset(-1, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: _historyListController,
+        curve: Curves.easeInOut,
+      ),
+    );
+  }
+
+  void _initHistoryDetailAnimation() {
+    _historyDetailController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _historyDetailAnimation = Tween<Offset>(
+      begin: const Offset(1, 0),
+      end: const Offset(0, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: _historyDetailController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   void _loadHistories() {
@@ -56,48 +104,62 @@ class _TaskHistoryPageState extends State<TaskHistoryPage> {
               end: Offset.zero,
             ).animate(widget.animation),
             child: ModalScaffold(
-              onDismissed: _onDismissed,
-              spacerColor: Colors.black87.withOpacity(0.5),
-              child: TaskHistoryList(
-                taskHistories: historyState.histories,
-                callbackAction: _onTaskHistoryCellTapped,
-              ),
-            ),
+                onDismissed: _onDismissed,
+                spacerColor: Colors.black87.withOpacity(0.5),
+                child: Stack(children: [
+                  SlideTransition(
+                      position: _historyListAnimation,
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints.expand(),
+                          child: _buildHistoryList(
+                              context, historyState.histories))),
+                  SlideTransition(
+                      position: _historyDetailAnimation,
+                      child: ConstrainedBox(
+                          constraints: BoxConstraints.expand(),
+                          child: _buildHistoryDetail(
+                              context, selectedTaskHistory)))
+                ])),
           );
         });
   }
 
+  Widget _buildHistoryList(BuildContext context, List<TaskHistory> histories) {
+    return TaskHistoryList(
+        taskHistories: histories, callbackAction: _onTaskHistoryCellTapped);
+  }
+
+  Widget _buildHistoryDetail(BuildContext context, TaskHistory? history) {
+    // if (history == null) {
+    //   return Container(
+    //     color: AppTheme.appColors(context).background,
+    //   );
+    // }
+
+    return TaskHistoryDetail(onGoBack: _onHistoryDetailsGoBack);
+  }
+
   void _onDismissed(BuildContext context) {
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    logger.i('Task history page dismissed');
+    Navigator.pop(context);
     widget.onDismissed(context);
   }
 
   void _onTaskHistoryCellTapped(BuildContext context, TaskHistory taskHistory) {
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (BuildContext context, _, __) {
-          return TaskHistoryDetailPage(
-            onDismissed: _onDismissed,
-          );
-        },
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // Customize the transitions here
-          var begin = Offset(1.0, 0.0);
-          var end = Offset.zero;
-          var curve = Curves.ease;
+    _historyListController.forward(from: 0.0);
+    _historyDetailController.forward(from: 0.0);
 
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+    setState(() {
+      isHistoryDetailPresenting = true;
+    });
+  }
 
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-        transitionDuration: Duration(milliseconds: 400),
-      ),
-    );
+  void _onHistoryDetailsGoBack(BuildContext context) {
+    _historyListController.reverse();
+    _historyDetailController.reverse();
+
+    setState(() {
+      isHistoryDetailPresenting = false;
+    });
   }
 }

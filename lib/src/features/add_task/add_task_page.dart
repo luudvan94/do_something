@@ -77,7 +77,7 @@ class _AddTaskPageState extends State<AddTaskPage>
 
   @override
   void transitionToNextState() {
-    translate(offset: backwardTranslateAnimationOffset);
+    translate(begin: backwardTranslateAnimationOffset);
     fadeOut();
     if (currentStateIndex < states.length) {
       setState(() {
@@ -87,13 +87,13 @@ class _AddTaskPageState extends State<AddTaskPage>
       });
 
       fadeIn();
-      translate(offset: forwardTranslateAnimationOffset);
+      translate(begin: forwardTranslateAnimationOffset);
     }
   }
 
   @override
   void transitionToPreviousState() {
-    translate(offset: forwardTranslateAnimationOffset);
+    translate(begin: forwardTranslateAnimationOffset);
     fadeOut();
     if (currentStateIndex > 0) {
       setState(() {
@@ -103,7 +103,7 @@ class _AddTaskPageState extends State<AddTaskPage>
       });
 
       fadeIn();
-      translate(offset: backwardTranslateAnimationOffset);
+      translate(begin: backwardTranslateAnimationOffset);
     }
   }
 

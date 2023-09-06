@@ -1,3 +1,4 @@
+import 'package:do_something/src/utils/logger.dart';
 import 'package:flutter/material.dart';
 
 const animationDurationInMilliseconds = 300;
@@ -14,13 +15,23 @@ mixin TranslateMixing<T extends StatefulWidget>
       vsync: this,
       duration: const Duration(milliseconds: animationDurationInMilliseconds),
     );
+
+    _translateAnimation = Tween<Offset>(
+      begin: Offset.zero,
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _translateController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
-  void translate({required Offset offset}) {
+  void translate({required Offset begin, Offset end = Offset.zero}) {
     _translateController.reset();
     _translateAnimation = Tween<Offset>(
-      begin: offset,
-      end: Offset.zero,
+      begin: begin,
+      end: end,
     ).animate(
       CurvedAnimation(
         parent: _translateController,
