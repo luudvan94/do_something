@@ -37,6 +37,12 @@ class _TaskPageState extends State<TaskPage>
 
   void _handleSwipeUp(DragEndDetails details) {
     logger.i('Swipe up velocity: ${details.primaryVelocity}');
+    var currentTask =
+        StoreProvider.of<AppState>(context).state.taskState.currentTask;
+    if (currentTask == null) {
+      return;
+    }
+
     scalingController.forward(from: 0.0);
     _openTaskHistory();
   }
