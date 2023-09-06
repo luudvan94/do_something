@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
     return StoreProvider<AppState>(
         store: store,
         child: MaterialApp(
-          theme: AppTheme.darkThemeData,
+          theme: AppTheme.themeData,
           darkTheme: AppTheme.darkThemeData,
           home: const TaskPage(),
         ));

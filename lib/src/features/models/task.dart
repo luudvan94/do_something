@@ -49,8 +49,8 @@ class Task extends HiveObject {
     return 'Task{id: $id, name: $name, isOneTimeDone: $isOneTimeDone, rating: $rating, reviewDate: $reviewDate, ignoreCountLeft: $ignoreCountLeft, doneCount: $doneCount}';
   }
 
-  Map<String, dynamic> toJson() {
-    return {
+  String toJson() {
+    return jsonEncode({
       'id': id,
       'name': name,
       'isOneTimeDone': isOneTimeDone,
@@ -58,7 +58,7 @@ class Task extends HiveObject {
       'reviewDate': reviewDate.toIso8601String(),
       'ignoreCountLeft': ignoreCountLeft,
       'doneCount': doneCount,
-    };
+    });
   }
 
   static Task fromJson(Map<String, dynamic> json) {

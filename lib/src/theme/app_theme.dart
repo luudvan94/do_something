@@ -1,5 +1,4 @@
 import 'package:do_something/src/theme/task_colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -50,12 +49,17 @@ TextTheme _textTheme(ColorScheme colorScheme) {
       fontWeight: FontWeightExtension.normal,
       color: colorScheme.onBackground,
     ),
+    bodySmall: TextStyle(
+      fontSize: 18,
+      fontWeight: FontWeightExtension.normal,
+      color: colorScheme.onBackground,
+    ),
   );
 }
 
 ColorScheme _colorScheme(
     {ColorSwatch primarySwatch = Colors.blueGrey,
-    Color accentColor = Colors.grey,
+    Color accentColor = Colors.white70,
     Brightness brightness = Brightness.light}) {
   return ColorScheme(
     primary: primarySwatch,

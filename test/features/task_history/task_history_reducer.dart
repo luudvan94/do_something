@@ -18,7 +18,6 @@ void main() {
       final newHistory = TaskHistory(
           taskId: 'test1',
           doneDate: DateTime.now(),
-          historyTypeId: 'typeId',
           typeString: HistoryType.create.toName(),
           detailsJsonString: 'detailsJsonString');
       final action = AddTaskHistoryAction(newHistory);
@@ -37,13 +36,12 @@ void main() {
       final loadedHistory = TaskHistory(
           taskId: 'some_task_id',
           doneDate: DateTime.now(),
-          historyTypeId: 'typeId',
           typeString: 'some_type',
           detailsJsonString: 'detailsJsonString');
 
       when(mockBox.get(any, defaultValue: anyNamed('defaultValue')))
           .thenReturn([
-        jsonEncode(loadedHistory.toJson()),
+        loadedHistory.toJson(),
       ]);
 
       // Act

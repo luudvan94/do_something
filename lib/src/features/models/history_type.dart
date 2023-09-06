@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:do_something/src/features/models/task.dart';
 
 enum HistoryType {
@@ -17,9 +19,11 @@ extension HistoryTypeExtension on HistoryType {
   }
 }
 
-class TaskDifference {
-  dynamic oldValue;
-  dynamic newValue;
+class TaskDifference<T> {
+  final T oldValue;
+  final T newValue;
+
+  TaskDifference(this.oldValue, this.newValue);
 }
 
 abstract class HistoryTypeDetails {
@@ -27,10 +31,10 @@ abstract class HistoryTypeDetails {
 
   HistoryTypeDetails({String? id}) : id = id ?? DateTime.now().toString();
 
-  Map<String, dynamic> toJSON() {
-    return {
+  String toJSON() {
+    return jsonEncode({
       'id': id,
-    };
+    });
   }
 }
 
@@ -40,14 +44,15 @@ class HistoryTypeCompleteDetails implements HistoryTypeDetails {
 
   final String? comment;
 
-  HistoryTypeCompleteDetails({required this.id, this.comment});
+  HistoryTypeCompleteDetails({String? id, this.comment})
+      : id = id ?? DateTime.now().toString();
 
   @override
-  Map<String, dynamic> toJSON() {
-    return {
+  String toJSON() {
+    return jsonEncode({
       'id': id,
       'comment': comment,
-    };
+    });
   }
 
   factory HistoryTypeCompleteDetails.fromJson(Map<String, dynamic> json) {
@@ -55,6 +60,10 @@ class HistoryTypeCompleteDetails implements HistoryTypeDetails {
       id: json['id'],
       comment: json['comment'],
     );
+  }
+
+  factory HistoryTypeCompleteDetails.fromComment(String comment) {
+    return HistoryTypeCompleteDetails(comment: comment);
   }
 }
 
@@ -64,14 +73,15 @@ class HistoryTypeCreateDetails implements HistoryTypeDetails {
 
   final Task task;
 
-  HistoryTypeCreateDetails({required this.id, required this.task});
+  HistoryTypeCreateDetails({String? id, required this.task})
+      : id = id ?? DateTime.now().toString();
 
   @override
-  Map<String, dynamic> toJSON() {
-    return {
+  String toJSON() {
+    return jsonEncode({
       'id': id,
       'task': task.toJson(),
-    };
+    });
   }
 
   factory HistoryTypeCreateDetails.fromJson(Map<String, dynamic> json) {
@@ -79,6 +89,10 @@ class HistoryTypeCreateDetails implements HistoryTypeDetails {
       id: json['id'],
       task: Task.fromJson(json['task']),
     );
+  }
+
+  factory HistoryTypeCreateDetails.fromTask(Task task) {
+    return HistoryTypeCreateDetails(task: task);
   }
 }
 
@@ -88,14 +102,15 @@ class HistoryTypeUpdateDetails implements HistoryTypeDetails {
 
   final List<TaskDifference> differences;
 
-  HistoryTypeUpdateDetails({required this.id, required this.differences});
+  HistoryTypeUpdateDetails({String? id, required this.differences})
+      : id = id ?? DateTime.now().toString();
 
   @override
-  Map<String, dynamic> toJSON() {
-    return {
+  String toJSON() {
+    return jsonEncode({
       'id': id,
       'differences': differences,
-    };
+    });
   }
 
   factory HistoryTypeUpdateDetails.fromJson(Map<String, dynamic> json) {
@@ -103,6 +118,11 @@ class HistoryTypeUpdateDetails implements HistoryTypeDetails {
       id: json['id'],
       differences: json['differences'],
     );
+  }
+
+  factory HistoryTypeUpdateDetails.fromDifferences(
+      List<TaskDifference> differences) {
+    return HistoryTypeUpdateDetails(differences: differences);
   }
 }
 
@@ -112,14 +132,15 @@ class HistoryTypeDeleteDetails implements HistoryTypeDetails {
 
   final Task task;
 
-  HistoryTypeDeleteDetails({required this.id, required this.task});
+  HistoryTypeDeleteDetails({String? id, required this.task})
+      : id = id ?? DateTime.now().toString();
 
   @override
-  Map<String, dynamic> toJSON() {
-    return {
+  String toJSON() {
+    return jsonEncode({
       'id': id,
       'task': task.toJson(),
-    };
+    });
   }
 
   factory HistoryTypeDeleteDetails.fromJson(Map<String, dynamic> json) {
@@ -127,5 +148,9 @@ class HistoryTypeDeleteDetails implements HistoryTypeDetails {
       id: json['id'],
       task: Task.fromJson(json['task']),
     );
+  }
+
+  factory HistoryTypeDeleteDetails.fromTask(Task task) {
+    return HistoryTypeDeleteDetails(task: task);
   }
 }

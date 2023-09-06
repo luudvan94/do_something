@@ -42,6 +42,12 @@ class _TaskPageState extends State<TaskPage>
   }
 
   void _openTaskHistory() {
+    var currentTask =
+        StoreProvider.of<AppState>(context).state.taskState.currentTask;
+    if (currentTask == null) {
+      return;
+    }
+
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
@@ -55,6 +61,7 @@ class _TaskPageState extends State<TaskPage>
           return FadeTransition(
             opacity: curvedAnimation,
             child: TaskHistoryPage(
+              task: currentTask,
               animation: curvedAnimation,
               onDismissed: _onTaskHistoryPageDismissedHandler,
             ),
@@ -66,7 +73,7 @@ class _TaskPageState extends State<TaskPage>
 
   void _onTaskHistoryPageDismissedHandler(BuildContext context) {
     logger.i('Task history page dismissed');
-    Navigator.of(context).pop();
+    // Navigator.of(context).popUntil((route) => route.isFirst);
     scalingController.reverse();
   }
 

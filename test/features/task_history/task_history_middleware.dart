@@ -1,3 +1,4 @@
+import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_actions.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_middleware.dart';
@@ -34,9 +35,8 @@ void main() {
       var action = AddTaskHistoryAction(TaskHistory(
           taskId: 'some_task_id',
           doneDate: DateTime.now(),
-          historyTypeId: 'typeId',
           typeString: 'some_type',
-          detailsJsonString: 'detailsJsonString'));
+          details: HistoryTypeUpdateDetails(differences: [])));
 
       // Create mock function for next dispatcher
       final next = MockFunction();

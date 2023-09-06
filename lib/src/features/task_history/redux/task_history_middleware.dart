@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:do_something/src/redux/init_redux.dart';
 import 'package:do_something/src/features/task_history/redux/task_history_actions.dart';
 import 'package:do_something/src/utils/constants.dart';
@@ -10,11 +12,9 @@ Middleware<AppState> saveTaskHistoryMiddleware(TaskHistorySaver saver) {
   return (Store<AppState> store, action, NextDispatcher next) async {
     next(action);
 
-    if (action is AddTaskHistoryAction || action is LoadHistoriesAction) {
+    if (action is TaskHistoryAction) {
       logger.i('Saving task history to Hive');
-      var taskId = action is TaskHistoryAction
-          ? action.history.taskId
-          : (action as LoadHistoriesAction).taskId;
+      var taskId = action.history.taskId;
       saver.saveHistories(store, taskId);
     }
   };
@@ -32,7 +32,12 @@ class TaskHistorySaver {
 
   void saveHistories(Store<AppState> store, String taskId) {
     var box = _getBox(Constants.historyBoxName);
-    box.put(taskId,
-        store.state.taskHistoryState.histories.map((item) => item.toJson()));
+    var encodedHistories =
+        store.state.taskHistoryState.histories.map((item) => item.toJson());
+    logger.i('Saving histories: $encodedHistories');
+    box.put(
+      taskId,
+      encodedHistories.toList(),
+    );
   }
 }
