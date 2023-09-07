@@ -10,10 +10,14 @@ class AnkiTaskManager implements TaskManager {
 
   AnkiTaskManager({
     required this.tasks,
-  });
+  }) {
+    _updateAvailableTasks();
+  }
 
-  List<Task> get availableTasks {
-    return tasks.where((task) {
+  List<Task> availableTasks = [];
+
+  void _updateAvailableTasks() {
+    availableTasks = tasks.where((task) {
       return task.reviewDate.isBefore(DateTime.now()) &&
           task.ignoreCountLeft > 0 &&
           !(task.isOneTimeDone && task.doneCount > 0);
@@ -37,7 +41,7 @@ class AnkiTaskManager implements TaskManager {
   void calcuateNextTask() {
     // Decrement the ignoreCountLeft of the current task
     currentTask?.ignoreCountLeft -= 1;
-    logger.i('AnkiTaskManager.calcuateNextTask: $currentTask');
+    _updateAvailableTasks();
   }
 
   @override
@@ -54,7 +58,10 @@ class AnkiTaskManager implements TaskManager {
       // Calculate new review date using the Anki algorithm function
       int newInterval =
           calculateAnkiInterval(task.doneCount, task.ratingEnum.difficulty());
-      task.reviewDate = DateTime.now().add(Duration(days: newInterval));
+      var newReviewDate = DateTime.now().add(Duration(days: newInterval));
+
+      logger.i('New review date: $newReviewDate');
+      task.reviewDate = newReviewDate;
     }
   }
 

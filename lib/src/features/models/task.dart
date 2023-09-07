@@ -3,6 +3,8 @@ import 'package:do_something/src/features/models/rating.dart';
 import 'package:hive/hive.dart';
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
+
 part 'task.g.dart';
 
 @HiveType(typeId: 0)
@@ -32,6 +34,9 @@ class Task extends HiveObject {
   String details = '';
 
   Rating get ratingEnum => RatingExtension.fromName(rating);
+  bool get isDoneForTheDay =>
+      reviewDate.isBefore(DateTime.now()) == false ||
+      (isOneTimeDone && doneCount > 0);
 
   // constructor
   Task(

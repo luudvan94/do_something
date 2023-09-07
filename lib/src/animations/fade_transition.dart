@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+typedef TransitionCallback = Widget Function(
+    BuildContext, Animation<double>, Animation<double>);
+
 class FadeInTransition extends StatelessWidget {
   final Animation<double> animation;
   final Widget child;
@@ -23,6 +26,21 @@ class FadeInTransition extends StatelessWidget {
     return FadeTransition(
       opacity: fadeAnimation,
       child: child,
+    );
+  }
+
+  static void by(BuildContext context, TransitionCallback callback) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          // Apply curve to the animation
+          return FadeInTransition(
+            animation: animation,
+            child: callback(context, animation, secondaryAnimation),
+          );
+        },
+      ),
     );
   }
 }

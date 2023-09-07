@@ -8,26 +8,23 @@ class Header extends StatelessWidget {
   final Task? task;
   final TaskColor taskColor;
 
-  const Header({Key? key, this.task, required this.taskColor})
-      : super(key: key);
+  const Header({
+    Key? key,
+    required this.task,
+    required this.taskColor,
+  }) : super(key: key);
 
   void _onAddButtonPressed(BuildContext context) {
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const AddTaskPage(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          // Enter transition when you push the page onto the stack
-          Widget enterTransition =
-              FadeInTransition(animation: animation, child: child);
+    FadeInTransition.by(context,
+        (context, animation, secondaryAnimation) => const AddTaskPage());
+  }
 
-          // Exit transition when you pop the page from the stack
-          return enterTransition;
-        },
-        transitionDuration: const Duration(milliseconds: 100),
-        reverseTransitionDuration: const Duration(milliseconds: 100),
-      ),
-    );
+  void _onEditButtonPressed(BuildContext context) {
+    FadeInTransition.by(
+        context,
+        (context, animation, secondaryAnimation) => AddTaskPage(
+              task: task,
+            ));
   }
 
   @override
@@ -46,12 +43,12 @@ class Header extends StatelessWidget {
             children: [
               task != null
                   ? IconButton(
-                      onPressed: () {},
+                      onPressed: () => {_onEditButtonPressed(context)},
                       icon: const Icon(Icons.edit),
                       color: taskColor.foreground)
                   : const SizedBox.shrink(),
               IconButton(
-                onPressed: () => _onAddButtonPressed(context),
+                onPressed: () => {_onAddButtonPressed(context)},
                 iconSize: 32,
                 icon: const Icon(Icons.add),
                 color: taskColor.foreground,

@@ -12,8 +12,15 @@ Middleware<AppState> saveTaskHistoryMiddleware(TaskHistorySaver saver) {
 
     if (action is TaskHistoryAction) {
       logger.i('Saving task history to Hive');
-      var taskId = action.history.taskId;
-      saver.saveHistories(store, taskId);
+      var taskId = store.state.taskHistoryState.taskId;
+      if (taskId != null) {
+        if (action.history.taskId != taskId) {
+          logger.e(
+              'Task history task id does not match state task id. Task id: $taskId, History task id: ${action.history.taskId}');
+          return;
+        }
+        saver.saveHistories(store, taskId);
+      }
     }
   };
 }
@@ -32,7 +39,7 @@ class TaskHistorySaver {
     var box = _getBox(Constants.historyBoxName);
     var encodedHistories =
         store.state.taskHistoryState.histories.map((item) => item.toJson());
-    logger.i('Saving histories: $encodedHistories');
+    logger.i('Key: $taskId  Histories: $encodedHistories');
     box.put(
       taskId,
       encodedHistories.toList(),

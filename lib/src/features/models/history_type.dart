@@ -24,6 +24,13 @@ class TaskDifference {
   final String newValue;
 
   TaskDifference(this.oldValue, this.newValue);
+
+  String toJSON() {
+    return jsonEncode({
+      'oldValue': oldValue,
+      'newValue': newValue,
+    });
+  }
 }
 
 abstract class HistoryTypeDetails {
@@ -42,7 +49,7 @@ class HistoryTypeCompleteDetails implements HistoryTypeDetails {
   @override
   final String id;
 
-  final String? comment;
+  String? comment;
 
   HistoryTypeCompleteDetails({String? id, this.comment})
       : id = id ?? DateTime.now().toString();
@@ -109,7 +116,7 @@ class HistoryTypeUpdateDetails implements HistoryTypeDetails {
   String toJSON() {
     return jsonEncode({
       'id': id,
-      'differences': differences,
+      'differences': differences.map((diff) => diff.toJSON()).toList()
     });
   }
 

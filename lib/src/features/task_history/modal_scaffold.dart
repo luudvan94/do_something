@@ -4,13 +4,13 @@ typedef DismissCallback = void Function(BuildContext context);
 
 class ModalScaffold extends StatefulWidget {
   final Widget child;
-  final Color spacerColor;
+  final Animation<double> animation;
   final DismissCallback onDismissed;
 
   const ModalScaffold({
     Key? key,
     required this.child,
-    this.spacerColor = Colors.transparent,
+    required this.animation,
     required this.onDismissed,
   }) : super(key: key);
 
@@ -21,22 +21,34 @@ class ModalScaffold extends StatefulWidget {
 class _ModalScaffoldState extends State<ModalScaffold> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: widget.spacerColor,
-      child: Column(
-        children: [
-          GestureDetector(
-            onTap: () {
-              widget.onDismissed(context);
-            },
-            child: _buildSpacer(),
+    return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(children: [
+          Container(
+            color: Colors.black87.withOpacity(0.5),
           ),
-          Expanded(
-            child: widget.child,
-          ),
-        ],
-      ),
-    );
+          SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(0, 1),
+                end: Offset.zero,
+              ).animate(widget.animation),
+              child: Container(
+                color: Colors.transparent,
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        widget.onDismissed(context);
+                      },
+                      child: _buildSpacer(),
+                    ),
+                    Expanded(
+                      child: widget.child,
+                    ),
+                  ],
+                ),
+              ))
+        ]));
   }
 
   Widget _buildSpacer() {

@@ -25,7 +25,30 @@ TaskHistoryState addTaskHistoryHandler(
     TaskHistoryState state, AddTaskHistoryAction action) {
   // add new task history to state
   // return new state
+  logger.i('Adding task history: ${action.history}');
+  if (state.taskId != action.history.taskId) {
+    return TaskHistoryState(
+        histories: [action.history], taskId: action.history.taskId);
+  }
+
   return state.copyWith(histories: [...state.histories, action.history]);
+}
+
+//update task history
+TaskHistoryState updateTaskHistoryHandler(
+    TaskHistoryState state, UpdateTaskHistoryAction action) {
+  // update task history
+  // return new state
+  logger.i('Updating task history: ${action.history}');
+  var histories = state.histories.map((history) {
+    if (history.id == action.history.id) {
+      return action.history;
+    }
+
+    return history;
+  }).toList();
+
+  return state.copyWith(histories: histories);
 }
 
 typedef CallbackAction = Box Function(String boxName);
@@ -34,7 +57,6 @@ TaskHistoryState loadHistoriesHandler(
   LoadHistoriesAction action,
   CallbackAction getBox,
 ) {
-  logger.i('Loading histories for task: ${action.taskId}');
   // return mockTaskHistoryState;
   if (state.taskId != null && state.taskId == action.taskId) {
     logger.i('Histories already loaded for task: ${action.taskId}');
@@ -44,11 +66,11 @@ TaskHistoryState loadHistoriesHandler(
   logger.i('Loading histories for task: ${action.taskId}');
   var box = getBox(Constants.historyBoxName);
   var dynamic = box.get(action.taskId, defaultValue: []) as List;
+  logger.i('Dynamic History count: ${dynamic.length}');
   var jsonStringList = dynamic.cast<String>();
   var histories = jsonStringList
       .map((jsonString) => TaskHistory.fromJson(jsonDecode(jsonString)))
       .toList();
-  logger.i('Loaded histories: $histories');
   // return new state
-  return state.copyWith(histories: histories, taskId: action.taskId);
+  return TaskHistoryState(histories: histories, taskId: action.taskId);
 }

@@ -8,6 +8,7 @@ import 'package:do_something/src/features/add_task/states/base_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/header.dart';
 import 'package:do_something/src/features/add_task/widgets/progress_bar.dart';
+import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/mixings/fading_mixing.dart';
 import 'package:do_something/src/mixings/translate_mixing.dart';
 import 'package:do_something/src/theme/app_theme.dart';
@@ -17,7 +18,9 @@ import 'package:flutter/material.dart';
 enum CurrentStateStatus { completed, notCompleted }
 
 class AddTaskPage extends StatefulWidget {
-  const AddTaskPage({Key? key}) : super(key: key);
+  final Task? task;
+
+  const AddTaskPage({Key? key, this.task}) : super(key: key);
 
   @override
   State<AddTaskPage> createState() => _AddTaskPageState();
@@ -57,7 +60,7 @@ class _AddTaskPageState extends State<AddTaskPage>
   @override
   void initState() {
     super.initState();
-    taskBuilder = TaskBuilder();
+    taskBuilder = TaskBuilder(task: widget.task);
 
     _initState();
     transitionToNextState();

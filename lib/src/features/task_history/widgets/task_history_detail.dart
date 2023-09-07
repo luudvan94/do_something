@@ -1,23 +1,19 @@
 import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task.dart';
+import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 typedef OnDismissed = void Function(BuildContext context);
+double dragLimit = 100.0;
 
 class TaskHistoryDetail extends StatefulWidget {
-  final HistoryType historyType;
-  final Task? task;
-  final String? comment;
-  final List<TaskDifference> differences;
+  final TaskHistory? history;
   final OnDismissed onGoBack;
 
   const TaskHistoryDetail({
     Key? key,
-    this.task,
-    this.comment,
-    this.differences = const [],
-    required this.historyType,
+    required this.history,
     required this.onGoBack,
   }) : super(key: key);
 
@@ -25,9 +21,27 @@ class TaskHistoryDetail extends StatefulWidget {
   State<TaskHistoryDetail> createState() => _TaskHistoryDetailState();
 }
 
-double dragLimit = 100.0;
-
 class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
+  HistoryType? get historyType => widget.history?.type;
+
+  Task? get task {
+    if (historyType == HistoryType.create) {
+      return (widget.history?.details as HistoryTypeCreateDetails?)?.task;
+    } else if (historyType == HistoryType.delete) {
+      return (widget.history?.details as HistoryTypeDeleteDetails?)?.task;
+    }
+    return null;
+  }
+
+  String? get comment => historyType == HistoryType.complete
+      ? (widget.history?.details as HistoryTypeCompleteDetails?)?.comment
+      : null;
+
+  List<TaskDifference> get differences => historyType == HistoryType.update
+      ? (widget.history?.details as HistoryTypeUpdateDetails?)?.differences ??
+          []
+      : [];
+
   @override
   Widget build(BuildContext context) {
     double dragExtent = 0;
@@ -57,14 +71,14 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
                     // Back icon at the top
                     _buildBackButton(context),
 
-                    widget.task != null
-                        ? _buildTask(context, widget.task!)
+                    task != null
+                        ? _buildTask(context, task!)
                         : const SizedBox.shrink(),
-                    widget.comment != null
-                        ? _buildComment(context, widget.comment!)
+                    comment != null
+                        ? _buildComment(context, comment!)
                         : const SizedBox.shrink(),
-                    widget.differences.isNotEmpty
-                        ? _buildDifferences(context, widget.differences!)
+                    differences.isNotEmpty
+                        ? _buildDifferences(context, differences!)
                         : const SizedBox.shrink(),
                     // Your other widgets come here
                   ],
@@ -90,7 +104,7 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
     var textColor = Colors.black;
     var highlightColor = Colors.green[100]!;
 
-    if (widget.historyType == HistoryType.delete) {
+    if (historyType == HistoryType.delete) {
       highlightColor = Colors.red[100]!;
     }
 

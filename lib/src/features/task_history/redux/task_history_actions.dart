@@ -10,6 +10,10 @@ class AddTaskHistoryAction extends TaskHistoryAction {
   AddTaskHistoryAction(TaskHistory history) : super(history);
 }
 
+class UpdateTaskHistoryAction extends TaskHistoryAction {
+  UpdateTaskHistoryAction(TaskHistory history) : super(history);
+}
+
 class LoadHistoriesAction {
   final String taskId;
 

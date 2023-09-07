@@ -41,8 +41,6 @@ class _TextEditorState extends State<TextEditor> {
     if (widget.value.isNotEmpty) {
       _controller.text = widget.value;
     }
-
-    logger.i(widget.key);
   }
 
   @override

@@ -1,3 +1,6 @@
+import 'package:do_something/src/animations/fade_transition.dart';
+import 'package:do_something/src/features/add_comment/add_task_comment_page.dart';
+import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/task/footer.dart';
 import 'package:do_something/src/features/task/header.dart';
@@ -24,6 +27,8 @@ class TaskPage extends StatefulWidget {
 
 class _TaskPageState extends State<TaskPage>
     with TickerProviderStateMixin, ScalingMixin<TaskPage> {
+  Task? get currentTask =>
+      StoreProvider.of<AppState>(context).state.taskState.currentTask;
   @override
   void initState() {
     super.initState();
@@ -48,38 +53,40 @@ class _TaskPageState extends State<TaskPage>
   }
 
   void _openTaskHistory() {
-    var currentTask =
-        StoreProvider.of<AppState>(context).state.taskState.currentTask;
     if (currentTask == null) {
       return;
     }
 
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        opaque: false,
-        pageBuilder: (context, animation, secondaryAnimation) {
-          // Apply curve to the animation
-          var curvedAnimation =
-              Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
-            parent: animation,
-            curve: Curves.easeIn,
-          ));
-
-          return FadeTransition(
-            opacity: curvedAnimation,
-            child: TaskHistoryPage(
-              task: currentTask,
-              animation: curvedAnimation,
-              onDismissed: _onTaskHistoryPageDismissedHandler,
-            ),
-          );
-        },
-      ),
-    );
+    FadeInTransition.by(
+        context,
+        (context, animation, secondaryAnimation) => TaskHistoryPage(
+            task: currentTask!,
+            animation: animation,
+            onDismissed: _onModalDismissed));
   }
 
-  void _onTaskHistoryPageDismissedHandler(BuildContext context) {
-    logger.i('Task history page dismissed');
+  void _openCommentEdit() {
+    if (currentTask == null) {
+      return;
+    }
+
+    var store = StoreProvider.of<AppState>(context);
+    var history = store.state.taskHistoryState.latestHistory;
+    if (history == null || history.details is! HistoryTypeCompleteDetails) {
+      return;
+    }
+
+    scalingController.forward(from: 0.0);
+    logger.i('Open comment edit');
+    FadeInTransition.by(
+        context,
+        (context, animation, secondaryAnimation) => AddTaskCommentPage(
+            history: history,
+            animation: animation,
+            onDismissed: _onModalDismissed));
+  }
+
+  void _onModalDismissed(BuildContext context) {
     scalingController.reverse();
   }
 
@@ -100,7 +107,7 @@ class _TaskPageState extends State<TaskPage>
                 Container(color: Colors.black),
                 Stack(
                   children: [
-                    _buildBackgroundContent(
+                    _buildContent(
                         currentTask, nextTask, currentTaskColor, context),
                     _buildHeaderAndFooter(
                         currentTask, currentTaskColor, context),
@@ -114,7 +121,7 @@ class _TaskPageState extends State<TaskPage>
         });
   }
 
-  Widget _buildBackgroundContent(Task? currentTask, Task? nextTask,
+  Widget _buildContent(Task? currentTask, Task? nextTask,
       TaskColorSet currentTaskColor, BuildContext context) {
     return Stack(
       children: [
@@ -130,6 +137,7 @@ class _TaskPageState extends State<TaskPage>
             task: currentTask,
             taskColor: currentTaskColor.colorFromRating(currentTask.ratingEnum),
             onHalfWidthReached: () => _handleHalfWidthReached(),
+            onAddCommentRequest: _openCommentEdit,
           ),
       ],
     );

@@ -44,7 +44,6 @@ class TaskHistory<T extends HistoryTypeDetails> {
 
   static T detailsFromJson<T extends HistoryTypeDetails>(
       Map<String, dynamic> jsonMap, HistoryType type) {
-    logger.i(type);
     switch (type) {
       case HistoryType.complete:
         return HistoryTypeCompleteDetails.fromJson(jsonMap) as T;
@@ -60,13 +59,11 @@ class TaskHistory<T extends HistoryTypeDetails> {
   }
 
   static TaskHistory fromJson(Map<String, dynamic> json) {
-    logger.i(json['typeString'] as String);
-
     return TaskHistory(
       id: json['id'],
       taskId: json['taskId'],
       doneDate: DateTime.parse(json['doneDate']),
-      typeString: 'create',
+      typeString: json['typeString'],
       details: detailsFromJson(jsonDecode(json['details']),
           HistoryTypeExtension.fromName(json['typeString'] as String)),
     );

@@ -16,14 +16,19 @@ class TaskHistoryState {
     return histories.where((history) => history.taskId == taskId).toList();
   }
 
+  TaskHistory? get latestHistory {
+    if (histories.isEmpty) return null;
+    return histories.last;
+  }
+
   // add copyWith function
   TaskHistoryState copyWith({
     String? taskId,
-    List<TaskHistory>? histories,
+    List<TaskHistory> histories = const [],
   }) {
     var copy = TaskHistoryState(
-      taskId: taskId,
-      histories: histories ?? this.histories,
+      taskId: taskId ?? this.taskId,
+      histories: histories,
     );
 
     return copy;

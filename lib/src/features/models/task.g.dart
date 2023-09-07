@@ -24,13 +24,14 @@ class TaskAdapter extends TypeAdapter<Task> {
       doneCount: fields[6] as int,
       isOneTimeDone: fields[2] as bool,
       ignoreCountLeft: fields[5] as int,
+      details: fields[7] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, Task obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class TaskAdapter extends TypeAdapter<Task> {
       ..writeByte(5)
       ..write(obj.ignoreCountLeft)
       ..writeByte(6)
-      ..write(obj.doneCount);
+      ..write(obj.doneCount)
+      ..writeByte(7)
+      ..write(obj.details);
   }
 
   @override

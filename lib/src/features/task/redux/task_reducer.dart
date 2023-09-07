@@ -23,6 +23,10 @@ TaskState taskStateReduce(TaskState state, dynamic action) {
     return nextTaskHandler(state, action);
   }
 
+  if (action is MarkTaskDoneAction) {
+    return markTaskAsDone(state, action);
+  }
+
   return state;
 }
 
@@ -57,6 +61,12 @@ TaskState updateTaskHandler(TaskState state, UpdateTaskAction action) {
       return task;
     }).toList(),
   );
+}
+
+TaskState markTaskAsDone(TaskState state, MarkTaskDoneAction action) {
+  logger.i('Mark task as done');
+  state.taskManager.markDone();
+  return state.copyWith(taskManager: state.taskManager);
 }
 
 TaskState nextTaskHandler(TaskState state, NextTaskAction action) {

@@ -23,3 +23,7 @@ class UpdateTaskAction extends TaskAction {
 class NextTaskAction extends TaskAction {
   NextTaskAction(Task task) : super(task);
 }
+
+class MarkTaskDoneAction extends TaskAction {
+  MarkTaskDoneAction(Task task) : super(task);
+}

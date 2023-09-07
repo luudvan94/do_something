@@ -1,5 +1,6 @@
 import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/theme/app_theme.dart';
+import 'package:do_something/src/utils/date.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -21,8 +22,8 @@ class TaskHistoryCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate =
-        DateFormat('MMM d, y h:mm a').format(logDate.toLocal()).toLowerCase();
+    String formattedDate = logDate.formattedDate(timeFormat: 'hh:mm a');
+
     return Column(
       children: [
         Container(
@@ -72,7 +73,7 @@ class TaskHistoryCell extends StatelessWidget {
   }
 
   Widget _commentBuilder(BuildContext context, String? comment) {
-    if (comment == null) {
+    if (comment == null || comment == '') {
       return const SizedBox.shrink();
     }
 
@@ -82,15 +83,6 @@ class TaskHistoryCell extends StatelessWidget {
         AppTheme.textStyle(context)
             .bodySmall!
             .copyWith(color: AppTheme.appColors(context).onSecondary));
-  }
-
-  Widget _buildText(BuildContext context, String content, TextStyle style) {
-    return Text(
-      content,
-      overflow: TextOverflow.ellipsis,
-      maxLines: 1,
-      style: style,
-    );
   }
 
   Widget _historyTypeBuilder(BuildContext context, HistoryType type) {
@@ -123,6 +115,15 @@ class TaskHistoryCell extends StatelessWidget {
             .bodySmall!
             .copyWith(color: textColor, fontWeight: FontWeight.w300),
       ),
+    );
+  }
+
+  Widget _buildText(BuildContext context, String content, TextStyle style) {
+    return Text(
+      content,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: style,
     );
   }
 }

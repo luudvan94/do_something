@@ -1,4 +1,3 @@
-import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/features/task_history/modal_scaffold.dart';
@@ -59,7 +58,7 @@ class _TaskHistoryPageState extends State<TaskHistoryPage>
 
     _historyListAnimation = Tween<Offset>(
       begin: const Offset(0, 0),
-      end: Offset(-1, 0),
+      end: const Offset(-1, 0),
     ).animate(
       CurvedAnimation(
         parent: _historyListController,
@@ -86,8 +85,13 @@ class _TaskHistoryPageState extends State<TaskHistoryPage>
   }
 
   void _loadHistories() {
-    StoreProvider.of<AppState>(context)
-        .dispatch(LoadHistoriesAction(widget.task.id));
+    var store = StoreProvider.of<AppState>(context);
+    var currentTask = store.state.taskState.currentTask;
+
+    if (currentTask != null) {
+      logger.i('Loading histories for task: $currentTask');
+      store.dispatch(LoadHistoriesAction(currentTask.id));
+    }
   }
 
   @override
@@ -97,35 +101,21 @@ class _TaskHistoryPageState extends State<TaskHistoryPage>
         builder: (context, historyState) {
           logger.i('Task history state: ${historyState.histories}}');
 
-          return Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Stack(children: [
-              Container(
-                color: Colors.black87.withOpacity(0.5),
-              ),
+          return ModalScaffold(
+            animation: widget.animation,
+            onDismissed: _onDismissed,
+            child: Stack(children: [
               SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(0, 1),
-                  end: Offset.zero,
-                ).animate(widget.animation),
-                child: ModalScaffold(
-                    onDismissed: _onDismissed,
-                    spacerColor: Colors.transparent,
-                    child: Stack(children: [
-                      SlideTransition(
-                          position: _historyListAnimation,
-                          child: ConstrainedBox(
-                              constraints: const BoxConstraints.expand(),
-                              child: _buildHistoryList(
-                                  context, historyState.histories))),
-                      SlideTransition(
-                          position: _historyDetailAnimation,
-                          child: ConstrainedBox(
-                              constraints: const BoxConstraints.expand(),
-                              child: _buildHistoryDetail(
-                                  context, selectedTaskHistory)))
-                    ])),
-              )
+                  position: _historyListAnimation,
+                  child: ConstrainedBox(
+                      constraints: const BoxConstraints.expand(),
+                      child:
+                          _buildHistoryList(context, historyState.histories))),
+              SlideTransition(
+                  position: _historyDetailAnimation,
+                  child: ConstrainedBox(
+                      constraints: const BoxConstraints.expand(),
+                      child: _buildHistoryDetail(context, selectedTaskHistory)))
             ]),
           );
         });
@@ -143,25 +133,10 @@ class _TaskHistoryPageState extends State<TaskHistoryPage>
       );
     }
 
-    String? comment = history.type == HistoryType.complete
-        ? (history.details as HistoryTypeCompleteDetails).comment
-        : null;
-    Task? task;
-    if (history.type == HistoryType.create) {
-      task = (history.details as HistoryTypeCreateDetails).task;
-    } else if (history.type == HistoryType.delete) {
-      task = (history.details as HistoryTypeDeleteDetails).task;
-    }
-    List<TaskDifference> differences = history.type == HistoryType.update
-        ? (history.details as HistoryTypeUpdateDetails).differences
-        : [];
-    logger.i('Selected history: $history');
     return TaskHistoryDetail(
-        onGoBack: _onHistoryDetailsGoBack,
-        historyType: history.type,
-        comment: comment,
-        task: task,
-        differences: differences);
+      history: history,
+      onGoBack: _onHistoryDetailsGoBack,
+    );
   }
 
   void _onDismissed(BuildContext context) {
@@ -171,7 +146,6 @@ class _TaskHistoryPageState extends State<TaskHistoryPage>
   }
 
   void _onTaskHistoryCellTapped(BuildContext context, TaskHistory taskHistory) {
-    logger.i('here');
     _historyListController.forward(from: 0.0);
     _historyDetailController.forward(from: 0.0);
 
