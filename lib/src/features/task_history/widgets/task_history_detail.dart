@@ -34,7 +34,11 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
   }
 
   String? get comment => historyType == HistoryType.complete
-      ? (widget.history?.details as HistoryTypeCompleteDetails?)?.comment
+      ? (widget.history?.details as HistoryTypeCompleteDetails?)?.comment != ''
+          ? (widget.history?.details as HistoryTypeCompleteDetails?)?.comment!
+          : widget.history?.details is HistoryTypeCompleteDetails
+              ? '(no comment)'
+              : null
       : null;
 
   List<TaskDifference> get differences => historyType == HistoryType.update
@@ -127,7 +131,8 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
   }
 
   Widget _buildComment(BuildContext context, String comment) {
-    return _buildText(context, comment);
+    return _buildText(context, comment,
+        color: Colors.black, highlightColor: Colors.blue[100]);
   }
 
   Widget _buildDifferences(

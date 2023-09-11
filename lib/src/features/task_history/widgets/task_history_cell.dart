@@ -2,7 +2,6 @@ import 'package:do_something/src/features/models/history_type.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/utils/date.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 typedef CallbackAction = void Function();
 

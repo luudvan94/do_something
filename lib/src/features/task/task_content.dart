@@ -13,12 +13,35 @@ class TaskContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        task.name,
-        style: AppTheme.textStyle(context).bodyLarge!.copyWith(
-              color: taskColor.foreground,
-            ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildTaskName(context),
+          const SizedBox(height: 20),
+          task.details != ''
+              ? _buildTaskDescription(context)
+              : const SizedBox.shrink(),
+        ],
       ),
+    );
+  }
+
+  Widget _buildTaskName(BuildContext context) {
+    return Text(
+      task.name,
+      style: AppTheme.textStyle(context).bodyLarge!.copyWith(
+            color: taskColor.foreground,
+          ),
+    );
+  }
+
+  Widget _buildTaskDescription(BuildContext context) {
+    return Text(
+      task.details,
+      style: AppTheme.textStyle(context).bodyMedium!.copyWith(
+            color: taskColor.foreground,
+          ),
     );
   }
 }

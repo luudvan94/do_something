@@ -6,6 +6,7 @@ import 'package:do_something/src/features/task/footer.dart';
 import 'package:do_something/src/features/task/header.dart';
 import 'package:do_something/src/features/task/no_task_available.dart';
 import 'package:do_something/src/features/task/not_dragging_task_container.dart';
+import 'package:do_something/src/features/task/notification_carousel.dart';
 import 'package:do_something/src/features/task/redux/task_actions.dart';
 import 'package:do_something/src/features/task/redux/task_state.dart';
 import 'package:do_something/src/features/task/task_container.dart';
@@ -109,8 +110,8 @@ class _TaskPageState extends State<TaskPage>
                   children: [
                     _buildContent(
                         currentTask, nextTask, currentTaskColor, context),
-                    _buildHeaderAndFooter(
-                        currentTask, currentTaskColor, context),
+                    _buildHeaderAndFooter(currentTask, currentTaskColor,
+                        taskState.doneTimes, context),
 
                     // Footer at bottom of the screen
                   ],
@@ -143,17 +144,23 @@ class _TaskPageState extends State<TaskPage>
     );
   }
 
-  Widget _buildHeaderAndFooter(
-      Task? currentTask, TaskColorSet currentTaskColor, BuildContext context) {
+  Widget _buildHeaderAndFooter(Task? currentTask, TaskColorSet currentTaskColor,
+      int numberOfDoneTimes, BuildContext context) {
     return SafeArea(
         child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Header(
-          task: currentTask,
-          taskColor: currentTask != null
-              ? currentTaskColor.colorFromRating(currentTask.ratingEnum)
-              : AppTheme.appTaskColor(context),
+        Column(
+          children: [
+            Header(
+              task: currentTask,
+              taskColor: currentTask != null
+                  ? currentTaskColor.colorFromRating(currentTask.ratingEnum)
+                  : AppTheme.appTaskColor(context),
+            ),
+            _buildNotification(
+                currentTask, numberOfDoneTimes, currentTaskColor, context)
+          ],
         ),
         if (currentTask != null)
           Footer(
@@ -162,5 +169,16 @@ class _TaskPageState extends State<TaskPage>
           ),
       ],
     ));
+  }
+
+  Widget _buildNotification(Task? currentTask, int numberOfDoneTimes,
+      TaskColorSet currentTaskColor, BuildContext context) {
+    if (currentTask == null) return const SizedBox.shrink();
+    return NotificationCarousel(
+      currentTask: currentTask,
+      numberOfDoneTimes: numberOfDoneTimes,
+      currentTaskColor:
+          currentTaskColor.colorFromRating(currentTask.ratingEnum),
+    );
   }
 }

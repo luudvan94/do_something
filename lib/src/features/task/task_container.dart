@@ -57,6 +57,7 @@ class _TaskContainerState extends State<TaskContainer>
     }
 
     if (horizontalDragLength >= MediaQuery.of(context).size.width / 2) {
+      logger.i('half width reached');
       widget.onHalfWidthReached();
     }
 

@@ -11,12 +11,13 @@ class AnkiTaskManager implements TaskManager {
   AnkiTaskManager({
     required this.tasks,
   }) {
-    _updateAvailableTasks();
+    updateAvailableTasks();
   }
 
   List<Task> availableTasks = [];
 
-  void _updateAvailableTasks() {
+  @override
+  void updateAvailableTasks() {
     availableTasks = tasks.where((task) {
       return task.reviewDate.isBefore(DateTime.now()) &&
           task.ignoreCountLeft > 0 &&
@@ -41,7 +42,7 @@ class AnkiTaskManager implements TaskManager {
   void calcuateNextTask() {
     // Decrement the ignoreCountLeft of the current task
     currentTask?.ignoreCountLeft -= 1;
-    _updateAvailableTasks();
+    updateAvailableTasks();
   }
 
   @override
@@ -67,7 +68,9 @@ class AnkiTaskManager implements TaskManager {
 
   @override
   AnkiTaskManager copyWith({List<Task>? newTasks}) {
-    return AnkiTaskManager(tasks: newTasks ?? tasks);
+    var copy = AnkiTaskManager(tasks: newTasks ?? tasks);
+    // copy._updateAvailableTasks();
+    return copy;
   }
 
   int byDateAndIgnoreCountLeft(Task a, Task b) {

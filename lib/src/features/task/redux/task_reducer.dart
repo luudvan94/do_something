@@ -34,7 +34,9 @@ TaskState newTaskHandler(TaskState state, NewTaskAction action) {
   logger.i('New task: ${action.task}');
   // add new task to state
   // return new state
-  return state.copyWith(tasks: [...state.tasks, action.task]);
+  var newState = state.copyWith(tasks: [...state.tasks, action.task]);
+  newState.taskManager.updateAvailableTasks();
+  return newState;
 }
 
 // create delete handler
@@ -53,7 +55,7 @@ TaskState deleteTaskHandler(TaskState state, DeleteTaskAction action) {
 TaskState updateTaskHandler(TaskState state, UpdateTaskAction action) {
   // update task in state
   // return new state
-  return state.copyWith(
+  state.copyWith(
     tasks: state.tasks.map((task) {
       if (task.id == action.task.id) {
         return action.task;
@@ -61,12 +63,15 @@ TaskState updateTaskHandler(TaskState state, UpdateTaskAction action) {
       return task;
     }).toList(),
   );
+
+  return state;
 }
 
 TaskState markTaskAsDone(TaskState state, MarkTaskDoneAction action) {
   logger.i('Mark task as done');
   state.taskManager.markDone();
-  return state.copyWith(taskManager: state.taskManager);
+  return state.copyWith(
+      taskManager: state.taskManager, doneTimes: state.doneTimes + 1);
 }
 
 TaskState nextTaskHandler(TaskState state, NextTaskAction action) {

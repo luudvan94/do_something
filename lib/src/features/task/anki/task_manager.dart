@@ -15,5 +15,7 @@ abstract class TaskManager {
 
   void markDone();
 
+  void updateAvailableTasks();
+
   TaskManager copyWith({List<Task>? newTasks});
 }

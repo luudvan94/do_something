@@ -4,11 +4,12 @@ import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/utils/date.dart';
 import 'package:do_something/src/utils/hive.dart';
 import 'package:do_something/src/utils/logger.dart';
-import 'package:hive/hive.dart';
 
 class TaskState {
   final List<Task> tasks;
   final TaskManager taskManager;
+  final DateTime lastCheckedInDate;
+  final int doneTimes;
 
   Task? get currentTask {
     return taskManager.currentTask;
@@ -20,15 +21,20 @@ class TaskState {
 
   TaskState({
     required this.tasks,
-    TaskManager? taskManager,
-  }) : taskManager = taskManager ?? AnkiTaskManager(tasks: tasks);
+    required this.taskManager,
+    required this.lastCheckedInDate,
+    this.doneTimes = 0,
+  });
 
   // Add copyWith function
   TaskState copyWith({
     List<Task>? tasks,
     TaskManager? taskManager,
+    int doneTimes = 0,
   }) {
     return TaskState(
+      doneTimes: doneTimes,
+      lastCheckedInDate: lastCheckedInDate,
       tasks: tasks ?? this.tasks,
       taskManager: taskManager ??
           this.taskManager.copyWith(newTasks: tasks ?? this.tasks),
@@ -39,6 +45,7 @@ class TaskState {
 var tasksKey = 'tasksKey';
 var currentTaskIdKey = 'currentTaskIdKey';
 var checkInDateKey = 'checkInDateKey';
+var doneTimes = 'doneTimesKey';
 
 Future<TaskState> loadTaskState(String boxName) async {
   logger.i('Loading task from Hive');
@@ -48,6 +55,7 @@ Future<TaskState> loadTaskState(String boxName) async {
 
   var latestCheckedInDate =
       box.get(checkInDateKey, defaultValue: DateTime.now());
+  var numberOfDoneTimes = box.get(doneTimes, defaultValue: 0);
 
   //TODO: just for testing, the condition should be !isSameDate(latestCheckedInDate, DateTime.now())
   if (isSameDate(latestCheckedInDate, DateTime.now())) {
@@ -57,5 +65,9 @@ Future<TaskState> loadTaskState(String boxName) async {
     });
     box.put(checkInDateKey, DateTime.now());
   }
-  return TaskState(tasks: tasks);
+  return TaskState(
+      tasks: tasks,
+      lastCheckedInDate: latestCheckedInDate,
+      doneTimes: numberOfDoneTimes,
+      taskManager: AnkiTaskManager(tasks: tasks));
 }

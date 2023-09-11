@@ -8,7 +8,7 @@ bool isSameDate(DateTime dateA, DateTime dateB) {
 
 extension DateTimeExtension on DateTime {
   String formattedDate(
-          {String dayFormat = 'dd MM, yyyy', String? timeFormat}) =>
+          {String dayFormat = 'MMM dd, yyyy', String? timeFormat}) =>
       DateFormat('$dayFormat ${timeFormat != null ? ', $timeFormat' : ''}')
           .format(toLocal())
           .toLowerCase();
