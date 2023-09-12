@@ -27,6 +27,10 @@ TaskState taskStateReduce(TaskState state, dynamic action) {
     return markTaskAsDone(state, action);
   }
 
+  if (action is UpdateColorSetAction) {
+    return updateSelectedColorSer(state, action);
+  }
+
   return state;
 }
 
@@ -79,4 +83,11 @@ TaskState nextTaskHandler(TaskState state, NextTaskAction action) {
   state.taskManager.calcuateNextTask();
 
   return state.copyWith(taskManager: state.taskManager);
+}
+
+TaskState updateSelectedColorSer(TaskState state, UpdateColorSetAction action) {
+  logger.i('Next task');
+
+  return state.copyWith(
+      taskManager: state.taskManager, selectedColorSetId: action.id);
 }

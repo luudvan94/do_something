@@ -27,3 +27,9 @@ class NextTaskAction extends TaskAction {
 class MarkTaskDoneAction extends TaskAction {
   MarkTaskDoneAction(Task task) : super(task);
 }
+
+class UpdateColorSetAction {
+  String id;
+
+  UpdateColorSetAction(this.id);
+}

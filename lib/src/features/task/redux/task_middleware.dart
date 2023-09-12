@@ -31,5 +31,7 @@ class TaskSaver {
   void saveTasks(Store<AppState> store) {
     var box = Hive.box(Constants.taskBoxName);
     box.put(tasksKey, store.state.taskState.tasks);
+    box.put(doneTimesKey, store.state.taskState.doneTimes);
+    box.put(selectedColorSetKey, store.state.taskState.selectedColorSetId);
   }
 }

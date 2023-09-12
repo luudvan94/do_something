@@ -13,7 +13,8 @@ var mockDifferences = [
 TaskHistoryState mockTaskHistoryState =
     TaskHistoryState(taskId: 'test1', histories: [
   TaskHistory.create(mockTask),
-  TaskHistory.complete(mockTask, 'kinda functional'),
+  TaskHistory.complete(
+      mockTask, 'kinda functional', DateTime.now(), DateTime.now()),
   TaskHistory.update(mockTask, mockDifferences),
   TaskHistory.delete(mockTask)
 ]);

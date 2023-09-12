@@ -50,8 +50,14 @@ class HistoryTypeCompleteDetails implements HistoryTypeDetails {
   final String id;
 
   String? comment;
+  DateTime dueDate;
+  DateTime actionDate;
 
-  HistoryTypeCompleteDetails({String? id, this.comment})
+  HistoryTypeCompleteDetails(
+      {String? id,
+      this.comment,
+      required this.dueDate,
+      required this.actionDate})
       : id = id ?? DateTime.now().toString();
 
   @override
@@ -59,6 +65,8 @@ class HistoryTypeCompleteDetails implements HistoryTypeDetails {
     return jsonEncode({
       'id': id,
       'comment': comment,
+      'dueDate': dueDate.toIso8601String(),
+      'actionDate': actionDate.toIso8601String(),
     });
   }
 
@@ -66,11 +74,15 @@ class HistoryTypeCompleteDetails implements HistoryTypeDetails {
     return HistoryTypeCompleteDetails(
       id: json['id'],
       comment: json['comment'],
+      dueDate: DateTime.parse(json['dueDate']),
+      actionDate: DateTime.parse(json['actionDate']),
     );
   }
 
-  factory HistoryTypeCompleteDetails.fromComment(String comment) {
-    return HistoryTypeCompleteDetails(comment: comment);
+  factory HistoryTypeCompleteDetails.fromComment(
+      String comment, DateTime dueDate, DateTime actionDate) {
+    return HistoryTypeCompleteDetails(
+        comment: comment, dueDate: dueDate, actionDate: actionDate);
   }
 }
 

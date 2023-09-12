@@ -70,9 +70,8 @@ class _AddTaskPageState extends State<AddTaskPage>
     states = [
       AddTaskNameState(),
       AddTaskDetailsState(),
-      AddTaskRatingState(),
       AddTaskOneTimeDoneState(),
-      AddTaskCompleteState(),
+      AddTaskRatingState(),
     ];
     currentStateIndex = -1;
     currentStep = 0;
@@ -148,7 +147,7 @@ class _AddTaskPageState extends State<AddTaskPage>
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 5, 0, 10),
                 child: ProgressBar(
-                    numberOfSteps: states.length - 1, currentStep: currentStep),
+                    numberOfSteps: states.length, currentStep: currentStep),
               ),
               if (childWidget != null)
                 Flexible(

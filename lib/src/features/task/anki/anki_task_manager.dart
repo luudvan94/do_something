@@ -20,7 +20,6 @@ class AnkiTaskManager implements TaskManager {
   void updateAvailableTasks() {
     availableTasks = tasks.where((task) {
       return task.reviewDate.isBefore(DateTime.now()) &&
-          task.ignoreCountLeft > 0 &&
           !(task.isOneTimeDone && task.doneCount > 0);
     }).toList()
       ..sort(byDateAndIgnoreCountLeft);
@@ -40,9 +39,13 @@ class AnkiTaskManager implements TaskManager {
 
   @override
   void calcuateNextTask() {
-    // Decrement the ignoreCountLeft of the current task
-    currentTask?.ignoreCountLeft -= 1;
-    updateAvailableTasks();
+    if (currentTask == null) return;
+
+    if (_isTaskFinished(currentTask!)) {
+      updateAvailableTasks();
+    } else {
+      _moveToBack(availableTasks, currentTask);
+    }
   }
 
   @override
@@ -74,15 +77,22 @@ class AnkiTaskManager implements TaskManager {
   }
 
   int byDateAndIgnoreCountLeft(Task a, Task b) {
-    DateTime dateA =
-        DateTime(a.reviewDate.year, a.reviewDate.month, a.reviewDate.day);
-    DateTime dateB =
-        DateTime(b.reviewDate.year, b.reviewDate.month, b.reviewDate.day);
+    return a.reviewDate.compareTo(b.reviewDate);
+  }
 
-    int dateComparison = dateA.compareTo(dateB);
-    if (dateComparison != 0) {
-      return dateComparison;
+  void _moveToBack<T>(List<T> list, T element) {
+    if (list.contains(element)) {
+      list.remove(element);
+      list.add(element);
     }
-    return b.ignoreCountLeft.compareTo(a.ignoreCountLeft);
+  }
+
+  bool _isTaskFinished(Task task) {
+    if ((task.isOneTimeDone && task.doneCount > 0) ||
+        task.reviewDate.isBefore(DateTime.now()) == false) {
+      return true;
+    }
+
+    return false;
   }
 }

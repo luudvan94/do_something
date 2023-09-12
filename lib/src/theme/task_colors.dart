@@ -85,15 +85,20 @@ class TaskColor {
 }
 
 class TaskColorSet {
+  final String id;
   final Map<Rating, TaskColor> colorRatingMap;
 
-  const TaskColorSet({required this.colorRatingMap});
+  const TaskColorSet({
+    required this.colorRatingMap,
+    required this.id,
+  });
 
   TaskColor colorFromRating(Rating rating) {
     return colorRatingMap[rating]!;
   }
 
   static TaskColorSet set1 = const TaskColorSet(
+    id: 'set1',
     colorRatingMap: {
       Rating.veryBad: TaskColor.orangee76f51,
       Rating.bad: TaskColor.orangef4a261,
@@ -104,6 +109,7 @@ class TaskColorSet {
   );
 
   static TaskColorSet set2 = const TaskColorSet(
+    id: 'set2',
     colorRatingMap: {
       Rating.veryBad: TaskColor.d4a373,
       Rating.bad: TaskColor.faedcd,
@@ -114,6 +120,7 @@ class TaskColorSet {
   );
 
   static TaskColorSet set3 = const TaskColorSet(
+    id: 'set3',
     colorRatingMap: {
       Rating.veryBad: TaskColor.e63946,
       Rating.bad: TaskColor.blue457b9d,
@@ -122,4 +129,6 @@ class TaskColorSet {
       Rating.veryGood: TaskColor.f1faee,
     },
   );
+
+  static List<TaskColorSet> allSets = [set1, set2, set3];
 }

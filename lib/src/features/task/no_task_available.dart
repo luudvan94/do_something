@@ -4,7 +4,6 @@ import 'package:do_something/src/theme/app_theme.dart';
 import 'package:do_something/src/theme/task_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:do_something/src/utils/date.dart';
 
 class NoTaskAvailable extends StatelessWidget {
   final TaskColor taskColor;
@@ -20,8 +19,7 @@ class NoTaskAvailable extends StatelessWidget {
           return Container(
               color: taskColor.background,
               child: Center(
-                child: Text(
-                    'No task available left for ${taskState.lastCheckedInDate.formattedDate()}.',
+                child: Text('No task available',
                     style: AppTheme.textStyle(context).bodyMedium!),
               ));
         });

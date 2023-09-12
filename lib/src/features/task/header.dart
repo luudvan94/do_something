@@ -1,6 +1,7 @@
 import 'package:do_something/src/animations/fade_transition.dart';
 import 'package:do_something/src/features/add_task/add_task_page.dart';
 import 'package:do_something/src/features/models/task.dart';
+import 'package:do_something/src/features/settings/setting_page.dart';
 import 'package:do_something/src/theme/task_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,15 @@ class Header extends StatelessWidget {
             ));
   }
 
+  void _onSettingButtonPressed(BuildContext context) {
+    FadeInTransition.by(
+        context,
+        (context, animation, secondaryAnimation) => SettingPage(
+              animation: animation,
+              onDismissed: (_) {},
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +45,9 @@ class Header extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              _onSettingButtonPressed(context);
+            },
             icon: const Icon(Icons.settings),
             color: taskColor.foreground,
           ),

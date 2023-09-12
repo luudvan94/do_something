@@ -26,15 +26,15 @@ extension RatingExtension on Rating {
   String toName() {
     switch (this) {
       case Rating.veryBad:
-        return 'Very Bad';
+        return 'rarely';
       case Rating.bad:
-        return 'Bad';
+        return 'occasionally';
       case Rating.neutral:
-        return 'Neutral';
+        return 'neutral';
       case Rating.good:
-        return 'Good';
+        return 'often';
       case Rating.veryGood:
-        return 'Very Good';
+        return 'very eager';
     }
   }
 
@@ -55,15 +55,15 @@ extension RatingExtension on Rating {
 
   static Rating fromName(String name) {
     switch (name) {
-      case 'Very Bad':
+      case 'rarely':
         return Rating.veryBad;
-      case 'Bad':
+      case 'occasionally':
         return Rating.bad;
-      case 'Neutral':
+      case 'neutral':
         return Rating.neutral;
-      case 'Good':
+      case 'often':
         return Rating.good;
-      case 'Very Good':
+      case 'very eager':
         return Rating.veryGood;
       default:
         return Rating.neutral;
@@ -92,7 +92,7 @@ class IdentifiableRating implements Identifiable {
   IdentifiableRating(this.rating);
 
   @override
-  String get id => rating.toString();
+  String get id => rating.toName();
 
   String get name {
     return rating.toName();

@@ -3,6 +3,7 @@ import 'package:do_something/src/features/models/task.dart';
 import 'package:do_something/src/features/models/task_history.dart';
 import 'package:do_something/src/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:do_something/src/utils/date.dart';
 
 typedef OnDismissed = void Function(BuildContext context);
 double dragLimit = 100.0;
@@ -40,6 +41,20 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
               ? '(no comment)'
               : null
       : null;
+
+  String get dueDateText => historyType == HistoryType.complete
+      ? (widget.history?.details as HistoryTypeCompleteDetails?)
+              ?.dueDate
+              .formattedDate() ??
+          ''
+      : '';
+
+  String get actionDateText => historyType == HistoryType.complete
+      ? (widget.history?.details as HistoryTypeCompleteDetails?)
+              ?.actionDate
+              .formattedDate() ??
+          ''
+      : '';
 
   List<TaskDifference> get differences => historyType == HistoryType.update
       ? (widget.history?.details as HistoryTypeUpdateDetails?)?.differences ??
@@ -79,7 +94,8 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
                         ? _buildTask(context, task!)
                         : const SizedBox.shrink(),
                     comment != null
-                        ? _buildComment(context, comment!)
+                        ? _buildComment(
+                            context, comment!, dueDateText, actionDateText)
                         : const SizedBox.shrink(),
                     differences.isNotEmpty
                         ? _buildDifferences(context, differences!)
@@ -130,9 +146,25 @@ class _TaskHistoryDetailState extends State<TaskHistoryDetail> {
     );
   }
 
-  Widget _buildComment(BuildContext context, String comment) {
-    return _buildText(context, comment,
-        color: Colors.black, highlightColor: Colors.blue[100]);
+  Widget _buildComment(
+      BuildContext context, String comment, String dueDate, String actionDate) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildText(
+          context,
+          'due date: $dueDate',
+        ),
+        const SizedBox(height: 10),
+        _buildText(
+          context,
+          'action date: $actionDate',
+        ),
+        const SizedBox(height: 10),
+        _buildText(context, comment,
+            color: Colors.black, highlightColor: Colors.blue[100]),
+      ],
+    );
   }
 
   Widget _buildDifferences(

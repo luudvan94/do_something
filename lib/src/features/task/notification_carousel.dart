@@ -62,15 +62,10 @@ class _NotificationCarouselState extends State<NotificationCarousel>
   }
 
   List<String> get notifications {
-    var lastIgnore =
-        'this is the last time this task will be displayed for today';
     var complete = 'double-tap to mark this task as complete';
     var comment = 'double-tap to add comment for this completion';
 
     List<String> notes = [];
-    if (widget.currentTask?.ignoreCountLeft == 1) {
-      notes.add(lastIgnore);
-    }
 
     if (widget.numberOfDoneTimes < 20) {
       if (widget.currentTask?.reviewDate.isBefore(DateTime.now()) == true) {

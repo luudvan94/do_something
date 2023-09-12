@@ -79,10 +79,12 @@ class _TaskContainerState extends State<TaskContainer>
       return;
     }
 
+    var currentTaskDueDate = currentTask.reviewDate;
     scalingController.forward(from: 0.0);
     store.dispatch(MarkTaskDoneAction(currentTask));
 
-    var taskHistory = TaskHistory.complete(currentTask, '');
+    var taskHistory = TaskHistory.complete(
+        currentTask, '', currentTaskDueDate, DateTime.now());
     store.dispatch(AddTaskHistoryAction(taskHistory));
   }
 

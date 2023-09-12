@@ -73,6 +73,12 @@ class AddTaskOneTimeDoneState extends AddTaskCompleteState {
       return;
     }
 
+    if (_selected!.value == 'no') {
+      mediator.transitionToNextState();
+      return;
+    }
+
+    // one time done task, complete the state
     super.onGoNext(context, mediator);
   }
 }

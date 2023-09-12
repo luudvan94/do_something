@@ -72,8 +72,8 @@ class TaskHistory<T extends HistoryTypeDetails> {
   static TaskHistory create(
     Task task,
   ) {
-    var history =
-        _createTaskHistory(task.id, null, null, task, HistoryType.create);
+    var history = _createTaskHistory(
+        task.id, null, null, task, null, null, HistoryType.create);
 
     if (history == null) {
       throw Exception('History details is null');
@@ -82,9 +82,10 @@ class TaskHistory<T extends HistoryTypeDetails> {
     return history;
   }
 
-  static TaskHistory complete(Task task, String comment) {
-    var history =
-        _createTaskHistory(task.id, comment, null, task, HistoryType.complete);
+  static TaskHistory complete(
+      Task task, String comment, DateTime dueDate, DateTime actionDate) {
+    var history = _createTaskHistory(task.id, comment, null, task, dueDate,
+        actionDate, HistoryType.complete);
 
     if (history == null) {
       throw Exception('History details is null');
@@ -95,7 +96,7 @@ class TaskHistory<T extends HistoryTypeDetails> {
 
   static TaskHistory update(Task task, List<TaskDifference> differences) {
     var history = _createTaskHistory(
-        task.id, null, differences, task, HistoryType.update);
+        task.id, null, differences, task, null, null, HistoryType.update);
 
     if (history == null) {
       throw Exception('History details is null');
@@ -105,8 +106,8 @@ class TaskHistory<T extends HistoryTypeDetails> {
   }
 
   static TaskHistory delete(Task task) {
-    var history =
-        _createTaskHistory(task.id, null, null, task, HistoryType.delete);
+    var history = _createTaskHistory(
+        task.id, null, null, task, null, null, HistoryType.delete);
 
     if (history == null) {
       throw Exception('History details is null');
@@ -120,6 +121,8 @@ class TaskHistory<T extends HistoryTypeDetails> {
       String? comment,
       List<TaskDifference>? differences,
       Task? task,
+      DateTime? dueDate,
+      DateTime? actionDate,
       HistoryType type) {
     HistoryTypeDetails? details;
     switch (type) {
@@ -132,7 +135,8 @@ class TaskHistory<T extends HistoryTypeDetails> {
             : null;
         break;
       case HistoryType.complete:
-        details = HistoryTypeCompleteDetails(comment: comment);
+        details = HistoryTypeCompleteDetails(
+            comment: comment, dueDate: dueDate!, actionDate: actionDate!);
         break;
       default:
         details = task != null ? HistoryTypeDeleteDetails(task: task) : null;

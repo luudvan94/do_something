@@ -1,5 +1,5 @@
 import 'package:do_something/src/features/add_task/add_task_page.dart';
-import 'package:do_something/src/features/add_task/states/base_state.dart';
+import 'package:do_something/src/features/add_task/states/add_task_complete_state.dart';
 import 'package:do_something/src/features/add_task/states/mediator.dart';
 import 'package:do_something/src/features/add_task/widgets/luu_selector.dart';
 import 'package:do_something/src/features/models/rating.dart';
@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 
 const oneTab = '  ';
 
-class AddTaskRatingState implements AddTaskBaseState {
+class AddTaskRatingState extends AddTaskCompleteState {
   List<Identifiable> ratings =
       Rating.values.map((rating) => IdentifiableRating(rating)).toList();
   IdentifiableRating? selectedRating;
 
   String _getLabel<T extends Identifiable>(T item) {
-    return (item as IdentifiableRating).rating.name + oneTab + item.emoji;
+    return (item as IdentifiableRating).rating.toName() + oneTab + item.emoji;
   }
 
   void _onSelected<T extends Identifiable>(T item, AddTaskMediator mediator) {
@@ -42,7 +42,7 @@ class AddTaskRatingState implements AddTaskBaseState {
 
     var widget = LuuSelector(
         key: const Key('AddTaskRatingState'),
-        label: 'how you like that?',
+        label: 'how often would you like this to occur?',
         items: ratings,
         getLabelForItem: _getLabel,
         isMultipleSelection: false,
@@ -66,6 +66,6 @@ class AddTaskRatingState implements AddTaskBaseState {
     }
 
     mediator.taskBuilder.addRating(selectedRating!.rating);
-    mediator.transitionToNextState();
+    super.onGoNext(context, mediator);
   }
 }
